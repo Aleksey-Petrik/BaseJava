@@ -19,7 +19,7 @@ public class ArrayStorage {
     public void save(Resume r) {
         if (size < storage.length) {
             if (find(r.getUuid()) < 0) storage[size++] = r;
-            else System.out.println("ERROR: Резюме с id-" + r.getUuid() + " уже есть в базе!");
+            else System.out.println("ERROR: Резюме с id-" + r.toString() + " уже есть в базе!");
         } else System.out.println("ERROR: Превышен лимит записей!!!");
     }
 
@@ -45,7 +45,7 @@ public class ArrayStorage {
     public void update(Resume r) {
         int i = find(r.getUuid());
         if (i >= 0) storage[i] = r;
-        else System.out.println("ERROR: Резюме с id-" + r.getUuid() + " не найдено!");
+        else System.out.println("ERROR: Резюме с id-" + r.toString() + " не найдено!");
     }
 
     /**
