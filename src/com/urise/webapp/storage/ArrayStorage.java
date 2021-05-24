@@ -16,13 +16,14 @@ public class ArrayStorage extends AbstractArrayStorage {
         return size == 0 ? -1 : (size + 1) * -1;
     }
 
-    protected void deleteNull(int index) {
-        if (index != size - 1) {
-            storage[index] = storage[size - 1];
-            storage[size - 1] = null;
-        } else {
-            storage[index] = null;
-        }
+    protected void putResume(Resume r, int index) {
+        index = Math.abs(index + 1);
+        storage[index] = r;
+    }
+
+    protected void deleteResume(int index) {
+        storage[index] = storage[size - 1];
+        storage[size - 1] = null;
     }
 
 }
