@@ -15,10 +15,19 @@ public class SortedArrayStorage extends AbstractArrayStorage {
         return Arrays.binarySearch(storage, 0, size, searchKey);
     }
 
-    protected void deleteNull(int index) {
-        for (int i = index; i < size; i++) {
-            storage[i] = storage[i + 1];
+    protected void putResume(Resume r, int index) {
+        index = Math.abs(index + 1);
+        Resume currentResume = r;
+        while (currentResume != null) {
+            Resume bufferResume = storage[index];
+            storage[index] = currentResume;
+            currentResume = bufferResume;
+            index++;
         }
+    }
+
+    protected void deleteResume(int index) {
+        if (size - index >= 0) System.arraycopy(storage, index + 1, storage, index, size - index);
     }
 
 }
