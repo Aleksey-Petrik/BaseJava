@@ -13,17 +13,15 @@ public class ArrayStorage extends AbstractArrayStorage {
                 return i;
             }
         }
-        return size == 0 ? -1 : (size + 1) * -1;
+        return -1;
     }
 
     protected void putResume(Resume r, int index) {
-        index = Math.abs(index + 1);
-        storage[index] = r;
+        storage[size] = r;
     }
 
     protected void deleteResume(int index) {
         storage[index] = storage[size - 1];
-        storage[size - 1] = null;
     }
 
 }
