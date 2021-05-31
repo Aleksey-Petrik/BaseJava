@@ -14,16 +14,14 @@ public abstract class AbstractArrayStorageTest extends AbstractStorageTest {
     @Test(expected = StorageException.class)
     public void saveLimitExceeded() throws StorageException {
         try {
-            fillAllStorage(AbstractArrayStorage.STORAGE_LIMIT - storageTest.size());
+            int len = AbstractArrayStorage.STORAGE_LIMIT - storageTest.size();
+            for (int i = 0; i < len; i++) {
+                storageTest.save(new Resume());
+            }
         } catch (StorageException err) {
             Assert.fail("Произошло переполнение хранилища, раньше времени!");
         }
         storageTest.save(RESUME_4);
     }
 
-    private void fillAllStorage(int length) {
-        for (int i = 0; i < length; i++) {
-            storageTest.save(new Resume());
-        }
-    }
 }
