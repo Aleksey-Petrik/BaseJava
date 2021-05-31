@@ -1,7 +1,5 @@
 package com.urise.webapp.storage;
 
-import com.urise.webapp.exception.ExistStorageException;
-import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 
@@ -10,65 +8,44 @@ import java.util.Arrays;
 /**
  * Array based storage for Resumes
  */
-public abstract class AbstractArrayStorage implements Storage {
+public abstract class AbstractArrayStorage extends AbstractStorage {
     protected static final int STORAGE_LIMIT = 10_000;
 
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int size = 0;
 
-    public void clear() {
+    protected void clearStorage() {
         Arrays.fill(storage, 0, size, null);
         size = 0;
     }
 
-    public void save(Resume r) {
-        if (size < STORAGE_LIMIT) {
-            int index = findIndex(r.getUuid());
-            if (index < 0) {
-                putResume(r, index);
-                size++;
-            } else {
-                throw new ExistStorageException(r.getUuid());
-            }
-        } else {
+    protected void saveResume(Resume r, int index) {
+        if (size >= STORAGE_LIMIT) {
             throw new StorageException(r.getUuid(), "Превышен лимит записей!!!");
         }
+        putResume(r, index);
+        size++;
     }
 
-    public Resume get(String uuid) {
-        int index = findIndex(uuid);
-        if (index >= 0) {
-            return storage[index];
-        }
-        throw new NotExistStorageException(uuid);
+    protected Resume getResume(int index){
+        return storage[index];
     }
 
-    public void delete(String uuid) {
-        int index = findIndex(uuid);
-        if (index >= 0) {
-            deleteResume(index);
-            storage[size - 1] = null;
-            size--;
-        } else {
-            throw new NotExistStorageException(uuid);
-        }
+    protected void updateResume(Resume r, int index){
+        storage[index] = r;
     }
 
-    public void update(Resume r) {
-        int index = findIndex(r.getUuid());
-        if (index >= 0) {
-            storage[index] = r;
-        } else {
-            throw new NotExistStorageException(r.getUuid());
-        }
-    }
-
-    public Resume[] getAll() {
+    protected Resume[] getStorage(){
         return Arrays.copyOfRange(storage, 0, size);
     }
 
-    public int size() {
+    protected int getSize(){
         return size;
+    }
+
+    protected void downsizeArray() {
+        storage[size - 1] = null;
+        size--;
     }
 
     protected abstract void putResume(Resume r, int index);
