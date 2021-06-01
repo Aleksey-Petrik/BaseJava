@@ -14,7 +14,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int size = 0;
 
-    protected void clearStorage() {
+    public void clear() {
         Arrays.fill(storage, 0, size, null);
         size = 0;
     }
@@ -27,31 +27,32 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         size++;
     }
 
-    protected Resume getResume(int index){
+    protected Resume getResume(int index) {
         return storage[index];
     }
 
-    protected void updateResume(Resume r, int index){
+    protected void deleteResume(int index) {
+        moveArray(index);
+        storage[size - 1] = null;
+        size--;
+    }
+
+    protected void updateResume(Resume r, int index) {
         storage[index] = r;
     }
 
-    protected Resume[] getStorage(){
+    public Resume[] getAll() {
         return Arrays.copyOfRange(storage, 0, size);
     }
 
-    protected int getSize(){
+    public int size() {
         return size;
-    }
-
-    protected void downsizeArray() {
-        storage[size - 1] = null;
-        size--;
     }
 
     protected abstract void putResume(Resume r, int index);
 
     protected abstract int findIndex(String uuid);
 
-    protected abstract void deleteResume(int index);
+    protected abstract void moveArray(int index);
 
 }
