@@ -7,12 +7,12 @@ import java.util.*;
 public class ListStorage extends AbstractStorage {
     protected List<Resume> storage = new ArrayList<>();
 
-    protected void clearStorage() {
+    public void clear() {
         storage.clear();
     }
 
     protected void saveResume(Resume r, int index) {
-        storage.add(Math.abs(index + 1), r);
+        storage.add(r);
     }
 
     protected Resume getResume(int index) {
@@ -27,18 +27,22 @@ public class ListStorage extends AbstractStorage {
         storage.remove(index);
     }
 
-    protected Resume[] getStorage() {
+    public Resume[] getAll() {
         Resume[] res = new Resume[storage.size()];
         return storage.toArray(res);
     }
 
-    protected int getSize() {
+    public int size() {
         return storage.size();
     }
 
     protected int findIndex(String uuid) {
-        Resume searchKey = new Resume(uuid);
-        return Collections.binarySearch(storage, searchKey);
+        for (Resume resume : storage) {
+            if (uuid.equals(resume.getUuid())) {
+                return storage.indexOf(resume);
+            }
+        }
+        return -1;
     }
 
 }
