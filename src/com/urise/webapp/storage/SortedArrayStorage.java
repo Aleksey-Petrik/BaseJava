@@ -23,8 +23,8 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     }
 
     protected void moveArray(int index) {
-        if (size - index >= 0) {
-            System.arraycopy(storage, index + 1, storage, index, size - index);
+        if ((size - 1) - index >= 0) {
+            System.arraycopy(storage, index + 1, storage, index, (size - 1) - index);
         }
     }
 
