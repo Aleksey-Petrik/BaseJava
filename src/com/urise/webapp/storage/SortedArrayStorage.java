@@ -22,10 +22,9 @@ public class SortedArrayStorage extends AbstractArrayStorage {
         storage[index] = r;
     }
 
-    protected void deleteResume(int index) {
+    protected void moveArray(int index) {
         if (size - index >= 0) {
             System.arraycopy(storage, index + 1, storage, index, size - index);
-            downsizeArray();
         }
     }
 
