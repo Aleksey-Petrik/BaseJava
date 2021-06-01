@@ -20,9 +20,8 @@ public class ArrayStorage extends AbstractArrayStorage {
         storage[size] = r;
     }
 
-    protected void deleteResume(int index) {
+    protected void moveArray(int index) {
         storage[index] = storage[size - 1];
-        downsizeArray();
     }
 
 }
