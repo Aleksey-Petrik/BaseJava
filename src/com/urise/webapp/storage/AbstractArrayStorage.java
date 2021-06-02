@@ -21,29 +21,29 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected void saveResume(Resume r, int index) {
+    protected void saveResume(Resume r, Object key) {
         if (size >= STORAGE_LIMIT) {
             throw new StorageException(r.getUuid(), "Превышен лимит записей!!!");
         }
-        putResume(r, index);
+        putResume(r, key);
         size++;
     }
 
     @Override
-    protected Resume getResume(int index) {
-        return storage[index];
+    protected Resume getResume(Object key) {
+        return storage[(int) key];
     }
 
     @Override
-    protected void deleteResume(int index) {
-        moveArray(index);
+    protected void deleteResume(Object key) {
+        moveArray(key);
         storage[size - 1] = null;
         size--;
     }
 
     @Override
-    protected void updateResume(Resume r, int index) {
-        storage[index] = r;
+    protected void updateResume(Resume r, Object key) {
+        storage[(int) key] = r;
     }
 
     @Override
@@ -56,10 +56,10 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         return size;
     }
 
-    protected abstract void putResume(Resume r, int index);
+    protected abstract void putResume(Resume r, Object key);
 
-    protected abstract int findIndex(String uuid);
+    protected abstract Object findIndex(String uuid);
 
-    protected abstract void moveArray(int index);
+    protected abstract void moveArray(Object key);
 
 }
