@@ -56,9 +56,13 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         return size;
     }
 
+    protected boolean isExist(Object key) {
+        return (int) key >= 0;
+    }
+
     protected abstract void putResume(Resume r, int index);
 
-    protected abstract Object findIndex(String uuid);
+    protected abstract Object findSearchKey(String uuid);
 
     protected abstract void moveArray(int index);
 
