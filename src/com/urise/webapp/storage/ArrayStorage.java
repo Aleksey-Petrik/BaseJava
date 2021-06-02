@@ -17,13 +17,13 @@ public class ArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    protected void putResume(Resume r, Object key) {
+    protected void putResume(Resume r, int index) {
         storage[size] = r;
     }
 
     @Override
-    protected void moveArray(Object key) {
-        storage[(int) key] = storage[size - 1];
+    protected void moveArray(int index) {
+        storage[index] = storage[size - 1];
     }
 
 }
