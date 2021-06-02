@@ -5,7 +5,7 @@ import com.urise.webapp.model.Resume;
 import java.util.*;
 
 public class ListStorage extends AbstractStorage {
-    protected List<Resume> storage = new ArrayList<>();
+    private List<Resume> storage = new ArrayList<>();
 
     @Override
     public void clear() {
@@ -43,7 +43,7 @@ public class ListStorage extends AbstractStorage {
         return storage.size();
     }
 
-    protected Object findIndex(String uuid) {
+    protected Object findSearchKey(String uuid) {
         int counter = 0;
         for (Resume resume : storage) {
             if (uuid.equals(resume.getUuid())) {
@@ -52,6 +52,11 @@ public class ListStorage extends AbstractStorage {
             counter++;
         }
         return -1;
+    }
+
+    @Override
+    protected boolean isExist(Object key) {
+        return (int) key >= 0;
     }
 
 }
