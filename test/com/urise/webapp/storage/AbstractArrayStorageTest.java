@@ -5,6 +5,8 @@ import com.urise.webapp.model.Resume;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.UUID;
+
 public abstract class AbstractArrayStorageTest extends AbstractStorageTest {
 
     public AbstractArrayStorageTest(Storage storageTest) {
@@ -16,7 +18,7 @@ public abstract class AbstractArrayStorageTest extends AbstractStorageTest {
         try {
             int len = AbstractArrayStorage.STORAGE_LIMIT - storageTest.size();
             for (int i = 0; i < len; i++) {
-                storageTest.save(new Resume());
+                storageTest.save(new Resume(UUID.randomUUID().toString()));
             }
         } catch (StorageException err) {
             Assert.fail("Произошло переполнение хранилища, раньше времени!");
