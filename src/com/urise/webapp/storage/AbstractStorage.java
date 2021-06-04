@@ -4,28 +4,38 @@ import com.urise.webapp.exception.ExistStorageException;
 import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.Resume;
 
+import java.util.Collections;
+import java.util.List;
+
 public abstract class AbstractStorage implements Storage {
     @Override
     public void save(Resume r) {
-        saveResume(r, isExistForException(r.getUuid()));
+        saveResume(r, getSearchKeyIfExist(r.getUuid()));
     }
 
     @Override
     public Resume get(String uuid) {
-        return getResume(isNotExistForException(uuid));
+        return getResume(getSearchKeyIfNotExist(uuid));
     }
 
     @Override
     public void delete(String uuid) {
-        deleteResume(isNotExistForException(uuid));
+        deleteResume(getSearchKeyIfNotExist(uuid));
     }
 
     @Override
     public void update(Resume r) {
-        updateResume(r, isNotExistForException(r.getUuid()));
+        updateResume(r, getSearchKeyIfNotExist(r.getUuid()));
     }
 
-    private Object isExistForException(String uuid) {
+    @Override
+    public List<Resume> getAllSorted() {
+        List<Resume> resumes = convertStorageInList();
+        Collections.sort(resumes);
+        return resumes;
+    }
+
+    private Object getSearchKeyIfExist(String uuid) {
         Object key = findSearchKey(uuid);
         if (isExist(key)) {
             throw new ExistStorageException(uuid);
@@ -33,13 +43,15 @@ public abstract class AbstractStorage implements Storage {
         return key;
     }
 
-    private Object isNotExistForException(String uuid) {
+    private Object getSearchKeyIfNotExist(String uuid) {
         Object key = findSearchKey(uuid);
         if (!isExist(key)) {
             throw new NotExistStorageException(uuid);
         }
         return key;
     }
+
+    protected abstract List<Resume> convertStorageInList();
 
     protected abstract void updateResume(Resume r, Object key);
 
@@ -49,7 +61,7 @@ public abstract class AbstractStorage implements Storage {
 
     protected abstract void saveResume(Resume r, Object key);
 
-    protected abstract Object findSearchKey(String uuid);
+    protected abstract Object findSearchKey(String key);
 
     protected abstract boolean isExist(Object key);
 
