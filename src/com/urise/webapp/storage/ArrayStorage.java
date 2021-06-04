@@ -7,7 +7,7 @@ import com.urise.webapp.model.Resume;
  */
 public class ArrayStorage extends AbstractArrayStorage {
     @Override
-    protected Object findSearchKey(String uuid) {
+    protected Integer findSearchKey(String uuid) {
         for (int i = 0; i < size; i++) {
             if (uuid.equals(storage[i].getUuid())) {
                 return i;
