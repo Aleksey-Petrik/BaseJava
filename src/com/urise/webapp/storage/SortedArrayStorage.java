@@ -10,6 +10,7 @@ import java.util.Comparator;
  */
 public class SortedArrayStorage extends AbstractArrayStorage {
     private static final Comparator<Resume> RESUME_COMPARATOR_LAMBDA = (r1, r2) -> r1.getUuid().compareTo(r2.getUuid());
+    private static final Comparator<Resume> RESUME_COMPARATOR_2 = Comparator.comparing(Resume::getUuid);
     private static final Comparator<Resume> RESUME_COMPARATOR = new ResumeComparator();
 
     private static class ResumeComparator implements Comparator<Resume> {
@@ -21,7 +22,7 @@ public class SortedArrayStorage extends AbstractArrayStorage {
 
     protected Integer findSearchKey(String uuid) {
         Resume searchKey = new Resume(uuid, "Only For Search");
-        return Arrays.binarySearch(storage, 0, size, searchKey, RESUME_COMPARATOR_LAMBDA);
+        return Arrays.binarySearch(storage, 0, size, searchKey, RESUME_COMPARATOR_2);
     }
 
     protected void putResume(Resume r, int index) {
