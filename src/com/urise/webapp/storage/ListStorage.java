@@ -33,7 +33,7 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    public List<Resume> convertStorageInList() {
+    public List<Resume> getListResume() {
         return storage;
     }
 
