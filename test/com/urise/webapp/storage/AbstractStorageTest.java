@@ -7,7 +7,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public abstract class AbstractStorageTest {
@@ -95,12 +96,11 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void getAllSorted() {
-        List<Resume> listResumes = storageTest.getAllSorted();
-        Resume[] expectedResumes = new Resume[]{RESUME_1, RESUME_2, RESUME_3, RESUME_5};
-        Arrays.sort(expectedResumes);
-        Resume[] resumesActual = new Resume[listResumes.size()];
-        listResumes.toArray(resumesActual);
-        Assert.assertArrayEquals(expectedResumes, resumesActual);
+        List<Resume> resumesActual = storageTest.getAllSorted();
+        List<Resume> expectedResumes = new ArrayList<>();
+        Collections.addAll(expectedResumes, RESUME_1, RESUME_2, RESUME_3, RESUME_5);
+        Collections.sort(expectedResumes);
+        Assert.assertEquals(expectedResumes, resumesActual);
     }
 
     @Test
