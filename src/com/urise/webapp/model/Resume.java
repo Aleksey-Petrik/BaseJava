@@ -1,6 +1,7 @@
 package com.urise.webapp.model;
 
 import java.util.Comparator;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -17,6 +18,8 @@ public class Resume implements Comparable<Resume> {
     }
 
     public Resume(String uuid, String fullName) {
+        Objects.requireNonNull(uuid, "UUID mast not be null!");
+        Objects.requireNonNull(fullName, "fullName mast not be null!");
         this.uuid = uuid;
         this.fullName = fullName;
     }
@@ -37,24 +40,21 @@ public class Resume implements Comparable<Resume> {
 
         Resume resume = (Resume) o;
 
-        return uuid.equals(resume.uuid);
+        if (!uuid.equals(resume.uuid)) return false;
+        return fullName.equals(resume.fullName);
     }
 
     @Override
     public int hashCode() {
-        return uuid.hashCode();
+        int result = uuid.hashCode();
+        result = 31 * result + fullName.hashCode();
+        return result;
     }
 
     @Override
     public int compareTo(Resume o) {
         int compareResult = fullName.compareTo(o.fullName);
         return compareResult == 0 ? uuid.compareTo(o.uuid) : compareResult;
-    }
-
-    public static class Comparators {
-        public static Comparator<Resume> FULL_NAMES = Resume::compareTo;
-
-        public static Comparator<Resume> UUID = Comparator.comparing(Resume::getUuid);
     }
 
 }

@@ -97,7 +97,7 @@ public abstract class AbstractStorageTest {
     public void getAllSorted() {
         List<Resume> actualResumes = storageTest.getAllSorted();
         List<Resume> expectedResumes = Arrays.asList(RESUME_1, RESUME_2, RESUME_3, RESUME_5);
-        expectedResumes.sort(Resume.Comparators.FULL_NAMES);
+        expectedResumes.sort(Resume::compareTo);
         Assert.assertEquals(expectedResumes, actualResumes);
     }
 
