@@ -15,7 +15,7 @@ public class ListOrganizationSection extends AbstractSection {
         StringBuilder sb = new StringBuilder();
         for (Organization org : organizations) {
             sb.append(org.getOrganization().getTitle()).append(" ").
-                    append(org.getOrganization().getURL()).
+                    append(org.getOrganization().getUrl()).
                     append("\n");
 
             org.getPeriodContentList().forEach(period -> sb.append(period.getMonthBegin()).

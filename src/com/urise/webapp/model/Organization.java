@@ -4,22 +4,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Organization {
-    private Url organization;
-    private List<PeriodContent> periodContentList = new ArrayList<>();
+    private OrganizationLink organization;
+    private List<Period> periodList = new ArrayList<>();
 
-    public Organization(Url organization) {
+    public Organization(OrganizationLink organization) {
         this.organization = organization;
     }
 
-    public Url getOrganization() {
+    public OrganizationLink getOrganization() {
         return organization;
     }
 
-    public List<PeriodContent> getPeriodContentList() {
-        return periodContentList;
+    public List<Period> getPeriodContentList() {
+        return periodList;
     }
 
     public void addContent(String monthBegin, String monthEnd, String content) {
-        periodContentList.add(new PeriodContent(monthBegin, monthEnd, content));
+        periodList.add(new Period(monthBegin, monthEnd, content));
     }
 }
