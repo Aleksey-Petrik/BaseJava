@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class ResumeTestData {
     private static Map<ContactsType, String> contacts = new EnumMap<>(ContactsType.class);
-    private static Map<SectionType, AbstractSection> contents = new EnumMap<>(SectionType.class);
+    private static Map<SectionType, AbstractSection> sections = new EnumMap<>(SectionType.class);
 
     private static Resume testResume = new Resume("UUID_1", "Grigory Kislin");
 
@@ -24,8 +24,8 @@ public class ResumeTestData {
     }
 
     private static void addObjectiveAndPersonal() {
-        contents.put(SectionType.OBJECTIVE, new TextSection("Ведущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям \n"));
-        contents.put(SectionType.PERSONAL, new TextSection("Аналитический склад ума, сильная логика, креативность, инициативность. Пурист кода и архитектуры. \n"));
+        sections.put(SectionType.OBJECTIVE, new TextSection("Ведущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям \n"));
+        sections.put(SectionType.PERSONAL, new TextSection("Аналитический склад ума, сильная логика, креативность, инициативность. Пурист кода и архитектуры. \n"));
     }
 
     private static void addAchievementAndQualifications() {
@@ -53,7 +53,7 @@ public class ResumeTestData {
                 системы по JMX (Jython/ Django).""");
         sectionAchievement.addContent("+ Реализация протоколов по приему платежей всех основных платежных системы России \n" +
                 "(Cyberplat, Eport, Chronopay, Сбербанк), Белоруcсии(Erip, Osmp) и Никарагуа.");
-        contents.put(SectionType.ACHIEVEMENT, sectionAchievement);
+        sections.put(SectionType.ACHIEVEMENT, sectionAchievement);
 
         ListTextSection sectionQualifications = new ListTextSection();
 
@@ -81,9 +81,9 @@ public class ResumeTestData {
         sectionQualifications.addContent("+ Отличное знание и опыт применения концепций ООП, SOA, шаблонов проектрирования, \n" +
                 "архитектурных шаблонов, UML, функционального программирования");
         sectionQualifications.addContent("+ Родной русский, английский \"upper intermediate\"");
-        contents.put(SectionType.QUALIFICATIONS, sectionQualifications);
+        sections.put(SectionType.QUALIFICATIONS, sectionQualifications);
 
-        testResume.setSections(contents);
+        testResume.setSections(sections);
 
     }
 
@@ -150,7 +150,7 @@ public class ResumeTestData {
                 "Тестирование, отладка, внедрение ПО цифровой телефонной станции Alcatel 1000 S12 (CHILL, ASM).");
         organizationsExperience.addOrganization(organization);
 
-        contents.put(SectionType.EXPERIENCE, organizationsExperience);
+        sections.put(SectionType.EXPERIENCE, organizationsExperience);
 
         ListOrganizationSection organizationsEducation = new ListOrganizationSection();
 
@@ -180,7 +180,7 @@ public class ResumeTestData {
         organization.addContent("09/1984", "06/1987", "Закончил с отличием");
         organizationsEducation.addOrganization(organization);
 
-        contents.put(SectionType.EDUCATION, organizationsEducation);
+        sections.put(SectionType.EDUCATION, organizationsEducation);
     }
 
     public static void main(String[] args) {
