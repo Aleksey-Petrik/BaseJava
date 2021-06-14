@@ -12,7 +12,7 @@ public class Resume implements Comparable<Resume> {
     private final String fullName;
 
     private Map<ContactsType, String> contacts = new EnumMap<>(ContactsType.class);
-    private Map<SectionType, AbstractSection> contents = new EnumMap<>(SectionType.class);
+    private Map<SectionType, AbstractSection> sections = new EnumMap<>(SectionType.class);
 
     public Resume(String fullName) {
         this(UUID.randomUUID().toString(), fullName);//autogenerate
@@ -41,12 +41,12 @@ public class Resume implements Comparable<Resume> {
         this.contacts = contacts;
     }
 
-    public Map<SectionType, AbstractSection> getContents() {
-        return contents;
+    public Map<SectionType, AbstractSection> getSections() {
+        return sections;
     }
 
-    public void setContents(Map<SectionType, AbstractSection> contents) {
-        this.contents = contents;
+    public void setSections(Map<SectionType, AbstractSection> sections) {
+        this.sections = sections;
     }
 
     @Override

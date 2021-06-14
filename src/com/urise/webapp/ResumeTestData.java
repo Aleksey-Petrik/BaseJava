@@ -83,7 +83,7 @@ public class ResumeTestData {
         sectionQualifications.addContent("+ Родной русский, английский \"upper intermediate\"");
         contents.put(SectionType.QUALIFICATIONS, sectionQualifications);
 
-        testResume.setContents(contents);
+        testResume.setSections(contents);
 
     }
 
@@ -193,6 +193,6 @@ public class ResumeTestData {
         System.out.println("\nUUID - " + testResume.getUuid() + "\nИмя Фамилия - " + testResume.getFullName() + "\n");
         testResume.getContacts().forEach((k, v) -> System.out.println(k.getTitle() + " " + v));
         System.out.println();
-        testResume.getContents().forEach((k, v) -> System.out.println(k.getTitle() + "\n" + v.getContent()));
+        testResume.getSections().forEach((k, v) -> System.out.println(k.getTitle() + "\n" + v.getContent()));
     }
 }
