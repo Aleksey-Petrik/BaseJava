@@ -11,7 +11,7 @@ public class Resume implements Comparable<Resume> {
     private final String uuid;
     private final String fullName;
 
-    private Map<ContactsType, OrganizationLink> contacts = new EnumMap<>(ContactsType.class);
+    private Map<ContactsType, String> contacts = new EnumMap<>(ContactsType.class);
     private Map<SectionType, AbstractSection> contents = new EnumMap<>(SectionType.class);
 
     public Resume(String fullName) {
@@ -33,11 +33,11 @@ public class Resume implements Comparable<Resume> {
         return fullName;
     }
 
-    public Map<ContactsType, OrganizationLink> getContacts() {
+    public Map<ContactsType, String> getContacts() {
         return contacts;
     }
 
-    public void setContacts(Map<ContactsType, OrganizationLink> contacts) {
+    public void setContacts(Map<ContactsType, String> contacts) {
         this.contacts = contacts;
     }
 

@@ -4,8 +4,8 @@ public class OrganizationLink {
     private String name;
     private String url;
 
-    public OrganizationLink(String title, String url) {
-        this.name = title;
+    public OrganizationLink(String name, String url) {
+        this.name = name;
         this.url = url;
     }
 

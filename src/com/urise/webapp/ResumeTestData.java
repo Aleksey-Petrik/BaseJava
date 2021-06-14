@@ -6,19 +6,19 @@ import java.util.EnumMap;
 import java.util.Map;
 
 public class ResumeTestData {
-    private static Map<ContactsType, OrganizationLink> contacts = new EnumMap<>(ContactsType.class);
+    private static Map<ContactsType, String> contacts = new EnumMap<>(ContactsType.class);
     private static Map<SectionType, AbstractSection> contents = new EnumMap<>(SectionType.class);
 
     private static Resume testResume = new Resume("UUID_1", "Grigory Kislin");
 
     private static void addContacts() {
-        contacts.put(ContactsType.TEL_NUMBER, new OrganizationLink("+7(921)855-0482", ""));
-        contacts.put(ContactsType.SKYPE, new OrganizationLink("grigory.kislin", "skype:grigory.kislin"));
-        contacts.put(ContactsType.EMAIL, new OrganizationLink("gkislin@yandex.ru", "gkislin@yandex.ru"));
-        contacts.put(ContactsType.LINKED_IN, new OrganizationLink("", "https://www.linkedin.com/in/gkislin"));
-        contacts.put(ContactsType.GITHUB, new OrganizationLink("", "https://github.com/gkislin"));
-        contacts.put(ContactsType.STACKOVERFLOW, new OrganizationLink("", "https://stackoverflow.com/users/548473"));
-        contacts.put(ContactsType.HOME_SITE, new OrganizationLink("", "http://gkislin.ru/"));
+        contacts.put(ContactsType.TEL_NUMBER, "+7(921)855-0482");
+        contacts.put(ContactsType.SKYPE, "grigory.kislin");
+        contacts.put(ContactsType.EMAIL, "gkislin@yandex.ru");
+        contacts.put(ContactsType.LINKED_IN, "https://www.linkedin.com/in/gkislin");
+        contacts.put(ContactsType.GITHUB, "https://github.com/gkislin");
+        contacts.put(ContactsType.STACKOVERFLOW, "https://stackoverflow.com/users/548473");
+        contacts.put(ContactsType.HOME_SITE, "http://gkislin.ru/");
 
         testResume.setContacts(contacts);
     }
@@ -191,7 +191,7 @@ public class ResumeTestData {
         addExperienceAndEducation();
 
         System.out.println("\nUUID - " + testResume.getUuid() + "\nИмя Фамилия - " + testResume.getFullName() + "\n");
-        testResume.getContacts().forEach((k, v) -> System.out.println(k.getTitle() + " " + v.getTitle() + " " + v.getUrl()));
+        testResume.getContacts().forEach((k, v) -> System.out.println(k.getTitle() + " " + v));
         System.out.println();
         testResume.getContents().forEach((k, v) -> System.out.println(k.getTitle() + "\n" + v.getContent()));
     }
