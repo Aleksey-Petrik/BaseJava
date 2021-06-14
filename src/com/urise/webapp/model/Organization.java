@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Organization {
-    private OrganizationLink organization;
+    private Link organization;
     private List<Period> periodList = new ArrayList<>();
 
-    public Organization(OrganizationLink organization) {
+    public Organization(Link organization) {
         this.organization = organization;
     }
 
-    public OrganizationLink getOrganization() {
+    public Link getOrganization() {
         return organization;
     }
 

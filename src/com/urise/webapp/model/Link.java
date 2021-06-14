@@ -1,10 +1,10 @@
 package com.urise.webapp.model;
 
-public class OrganizationLink {
+public class Link {
     private String name;
     private String url;
 
-    public OrganizationLink(String name, String url) {
+    public Link(String name, String url) {
         this.name = name;
         this.url = url;
     }
