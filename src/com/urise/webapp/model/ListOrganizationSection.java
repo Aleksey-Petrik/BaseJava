@@ -13,6 +13,25 @@ public class ListOrganizationSection extends AbstractSection {
     @Override
     public String getContent() {
         StringBuilder sb = new StringBuilder();
+
+        organizations.forEach(org -> sb.append(org.getOrganization().getTitle())
+                .append(" ")
+                .append(org.getOrganization().getUrl())
+                .append("\n")
+                .append(org.getMonthBegin())
+                .append("-")
+                .append(org.getMonthEnd())
+                .append(" ")
+                .append(org.getContent())
+                .append("\n")
+        );
+        return sb.toString();
+    }
+
+    /* For Lesson 8
+    @Override
+    public String getContent() {
+        StringBuilder sb = new StringBuilder();
         for (Organization org : organizations) {
             sb.append(org.getOrganization().getTitle()).append(" ").
                     append(org.getOrganization().getUrl()).
@@ -27,4 +46,5 @@ public class ListOrganizationSection extends AbstractSection {
         }
         return sb.toString();
     }
+     */
 }
