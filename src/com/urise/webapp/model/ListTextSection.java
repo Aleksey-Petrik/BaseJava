@@ -8,17 +8,22 @@ public class ListTextSection extends AbstractSection {
     private List<String> contents = new ArrayList<>();
 
     @Override
-    public String getContent() {
+    public String getContents() {
         StringBuilder sb = new StringBuilder();
         contents.forEach(content -> sb.append(content).append("\n"));
         return sb.toString();
     }
 
     public void addContent(String content) {
-        this.contents.add(content);
+        contents.add(content);
     }
 
     public List<String> getListContent() {
         return contents;
+    }
+
+    @Override
+    public String toString() {
+        return contents.toString();
     }
 }

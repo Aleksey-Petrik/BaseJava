@@ -33,6 +33,10 @@ public class Resume implements Comparable<Resume> {
         return fullName;
     }
 
+    public String getContact(ContactsType type) {
+        return contacts.get(type);
+    }
+
     public Map<ContactsType, String> getContacts() {
         return contacts;
     }
@@ -49,6 +53,18 @@ public class Resume implements Comparable<Resume> {
         this.sections = sections;
     }
 
+    public AbstractSection getSection(SectionType type) {
+        return sections.get(type);
+    }
+
+    public void addContact(ContactsType type, String contact) {
+        contacts.put(type, contact);
+    }
+
+    public void addSection(SectionType type, AbstractSection section) {
+        sections.put(type, section);
+    }
+
     @Override
     public String toString() {
         return "ID - " + uuid + " Full name - " + fullName;
@@ -62,13 +78,17 @@ public class Resume implements Comparable<Resume> {
         Resume resume = (Resume) o;
 
         if (!uuid.equals(resume.uuid)) return false;
-        return fullName.equals(resume.fullName);
+        if (!fullName.equals(resume.fullName)) return false;
+        if (!contacts.equals(resume.contacts)) return false;
+        return sections.equals(resume.sections);
     }
 
     @Override
     public int hashCode() {
         int result = uuid.hashCode();
         result = 31 * result + fullName.hashCode();
+        result = 31 * result + contacts.hashCode();
+        result = 31 * result + sections.hashCode();
         return result;
     }
 

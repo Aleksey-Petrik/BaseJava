@@ -1,5 +1,7 @@
 package com.urise.webapp.model;
 
+import com.urise.webapp.util.DateUtil;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,40 +13,25 @@ public class ListOrganizationSection extends AbstractSection {
     }
 
     @Override
-    public String getContent() {
-        StringBuilder sb = new StringBuilder();
-
-        organizations.forEach(org -> sb.append(org.getOrganization().getTitle())
-                .append(" ")
-                .append(org.getOrganization().getUrl())
-                .append("\n")
-                .append(org.getMonthBegin())
-                .append("-")
-                .append(org.getMonthEnd())
-                .append(" ")
-                .append(org.getContent())
-                .append("\n")
-        );
-        return sb.toString();
-    }
-
-    /* For Lesson 8
-    @Override
-    public String getContent() {
+    public String getContents() {
         StringBuilder sb = new StringBuilder();
         for (Organization org : organizations) {
-            sb.append(org.getOrganization().getTitle()).append(" ").
+            sb.append(org.getOrganization().getName()).append(" ").
                     append(org.getOrganization().getUrl()).
                     append("\n");
 
-            org.getPeriodContentList().forEach(period -> sb.append(period.getMonthBegin()).
+            org.getPeriods().forEach(period -> sb.append(DateUtil.format(period.getMonthBegin(), "MM/YYYY")).
                     append("-").
-                    append(period.getMonthEnd()).
+                    append(DateUtil.format(period.getMonthEnd(), "MM/YYYY")).
                     append(" ").
                     append(period.getContent()).
                     append("\n"));
         }
         return sb.toString();
     }
-     */
+
+    @Override
+    public String toString() {
+        return organizations.toString();
+    }
 }
