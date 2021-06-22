@@ -10,6 +10,7 @@ import java.util.logging.*;
 
 public abstract class AbstractStorage<SK> implements Storage {
     private final Logger LOG = Logger.getLogger(AbstractStorage.class.getName());
+
     {
         Handler handler = new ConsoleHandler();
         handler.setFormatter(new XMLFormatter());

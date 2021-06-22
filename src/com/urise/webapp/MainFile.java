@@ -9,14 +9,13 @@ public class MainFile {
 
     private static void walkFiles(File file, int offset) {
         File[] fileList = Objects.requireNonNull(file.listFiles());
-
-        System.out.println("DIR." + "....".repeat(offset) + file.getName());
         for (File fl : fileList) {
             if (fl.isDirectory()) {
+                System.out.println("DIR  - " + "....".repeat(offset) + fl.getName());
                 walkFiles(fl, ++offset);
                 --offset;
             } else {
-                System.out.println("FILE" + "....".repeat(offset + 1) + fl.getName());
+                System.out.println("FILE - " + "....".repeat(offset) + fl.getName());
             }
         }
     }

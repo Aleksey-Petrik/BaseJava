@@ -1,12 +1,15 @@
 package com.urise.webapp.model;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.*;
 
 /**
  * Initial resume class
  */
-public class Resume implements Comparable<Resume> {
-
+public class Resume implements Comparable<Resume>, Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
     // Unique identifier
     private final String uuid;
     private final String fullName;
@@ -78,17 +81,13 @@ public class Resume implements Comparable<Resume> {
         Resume resume = (Resume) o;
 
         if (!uuid.equals(resume.uuid)) return false;
-        if (!fullName.equals(resume.fullName)) return false;
-        if (!contacts.equals(resume.contacts)) return false;
-        return sections.equals(resume.sections);
+        return fullName.equals(resume.fullName);
     }
 
     @Override
     public int hashCode() {
         int result = uuid.hashCode();
         result = 31 * result + fullName.hashCode();
-        result = 31 * result + contacts.hashCode();
-        result = 31 * result + sections.hashCode();
         return result;
     }
 

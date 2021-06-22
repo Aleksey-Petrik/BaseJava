@@ -3,6 +3,8 @@ package com.urise.webapp;
 import com.urise.webapp.model.*;
 import com.urise.webapp.util.DateUtil;
 
+import static com.urise.webapp.util.DateUtil._NOW_;
+
 public class ResumeTestData {
 
     public static Resume createFullResume(String uuid, String fullName) {
@@ -96,7 +98,7 @@ public class ResumeTestData {
         Organization organization = new Organization(new Link("Java Online Projects", "http://javaops.ru/"));
         organization.addPeriod(
                 DateUtil.of(2013, 10),
-                DateUtil.of(2021, 6),
+                _NOW_,
                 "Автор проекта.\n" +
                         "Создание, организация и проведение Java онлайн проектов и стажировок.");
         organizationsExperience.addOrganization(organization);
