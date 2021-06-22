@@ -3,5 +3,5 @@ out
 *.iml
 log
 lib
-lesson
+/lesson/
 /src/com/urise/webapp/storage/data/
