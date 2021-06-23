@@ -2,11 +2,13 @@ package com.urise.webapp.storage;
 
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
+import com.urise.webapp.storage.serialize.StreamSerialize;
 
 import java.io.*;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class FileStorage extends AbstractStorage<File> {
     private final File directory;
@@ -29,15 +31,7 @@ public class FileStorage extends AbstractStorage<File> {
 
     @Override
     protected List<Resume> getListResume() {
-        List<Resume> resumes = new ArrayList<>();
-        for (File file : Objects.requireNonNull(directory.listFiles())) {
-            try {
-                resumes.add(streamSerialize.doRead(new BufferedInputStream(new FileInputStream(file))));
-            } catch (IOException e) {
-                throw new StorageException(file.getName(), "IO error", e);
-            }
-        }
-        return resumes;
+        return getFileList(directory).stream().map(this::getResume).collect(Collectors.toList());
     }
 
     @Override
@@ -87,14 +81,18 @@ public class FileStorage extends AbstractStorage<File> {
 
     @Override
     public void clear() {
-        for (File file : Objects.requireNonNull(directory.listFiles())) {
-            deleteResume(file);
-        }
+        getFileList(directory).forEach(this::deleteResume);
     }
 
     @Override
     public int size() {
-        return Objects.requireNonNull(directory.listFiles()).length;
+        return getFileList(directory).size();
     }
 
+    private List<File> getFileList(File directory) {
+        if (directory.listFiles() == null) {
+            throw new StorageException(null, "No files found!");
+        }
+        return Arrays.asList(directory.listFiles());
+    }
 }
