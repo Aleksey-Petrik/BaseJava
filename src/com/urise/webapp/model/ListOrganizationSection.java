@@ -2,17 +2,24 @@ package com.urise.webapp.model;
 
 import com.urise.webapp.util.DateUtil;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static com.urise.webapp.util.DateUtil.MASK_FOR_PRINT_PERIOD;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 public class ListOrganizationSection extends AbstractSection {
     @Serial
     private static final long serialVersionUID = 1L;
 
     private List<Organization> organizations = new ArrayList<>();
+
+    public ListOrganizationSection() {
+    }
 
     public void addOrganization(Organization organization) {
         organizations.add(organization);
@@ -37,7 +44,22 @@ public class ListOrganizationSection extends AbstractSection {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ListOrganizationSection that = (ListOrganizationSection) o;
+        return Objects.equals(organizations, that.organizations);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(organizations);
+    }
+
+    @Override
     public String toString() {
-        return organizations.toString();
+        return "ListOrganizationSection{" +
+                "organizations=" + organizations +
+                '}';
     }
 }
