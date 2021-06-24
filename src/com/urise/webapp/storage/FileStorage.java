@@ -31,7 +31,7 @@ public class FileStorage extends AbstractStorage<File> {
 
     @Override
     protected List<Resume> getListResume() {
-        return getFileList(directory).stream().map(this::getResume).collect(Collectors.toList());
+        return getFileList().stream().map(this::getResume).collect(Collectors.toList());
     }
 
     @Override
@@ -81,18 +81,19 @@ public class FileStorage extends AbstractStorage<File> {
 
     @Override
     public void clear() {
-        getFileList(directory).forEach(this::deleteResume);
+        getFileList().forEach(this::deleteResume);
     }
 
     @Override
     public int size() {
-        return getFileList(directory).size();
+        return getFileList().size();
     }
 
-    private List<File> getFileList(File directory) {
-        if (directory.listFiles() == null) {
+    private List<File> getFileList() {
+        List<File> fileList = Arrays.asList(directory.listFiles());
+        if (fileList == null) {
             throw new StorageException(null, "No files found!");
         }
-        return Arrays.asList(directory.listFiles());
+        return fileList;
     }
 }

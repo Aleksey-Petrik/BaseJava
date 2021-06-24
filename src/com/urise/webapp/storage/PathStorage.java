@@ -32,7 +32,7 @@ public class PathStorage extends AbstractStorage<Path> {
 
     @Override
     protected List<Resume> getListResume() {
-        return getPathList(directory).map(this::getResume).collect(Collectors.toList());
+        return getPathList().map(this::getResume).collect(Collectors.toList());
     }
 
     @Override
@@ -76,7 +76,7 @@ public class PathStorage extends AbstractStorage<Path> {
 
     @Override
     protected Path findSearchKey(String uuid) {
-        return Paths.get(directory.toString()).resolve(uuid);
+        return directory.resolve(uuid);
     }
 
     @Override
@@ -86,16 +86,16 @@ public class PathStorage extends AbstractStorage<Path> {
 
     @Override
     public void clear() {
-        getPathList(directory).forEach(this::deleteResume);
+        getPathList().forEach(this::deleteResume);
     }
 
     @Override
     public int size() {
-        Stream<Path> list = getPathList(directory);
-        return list != null ? (int) list.count() : 0;
+        Stream<Path> list = getPathList();
+        return (int) list.count();
     }
 
-    private Stream<Path> getPathList(Path directory) {
+    private Stream<Path> getPathList() {
         try {
             return Files.list(directory);
         } catch (IOException e) {
