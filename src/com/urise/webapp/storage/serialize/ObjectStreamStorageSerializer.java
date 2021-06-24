@@ -5,7 +5,7 @@ import com.urise.webapp.model.Resume;
 
 import java.io.*;
 
-public class ObjectStreamStorageSerialize implements StreamSerialize {
+public class ObjectStreamStorageSerializer implements StreamSerialize {
 
     @Override
     public Resume doRead(InputStream is) throws IOException {
