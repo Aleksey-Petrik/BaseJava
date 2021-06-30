@@ -21,15 +21,20 @@ public class ListTextSection extends AbstractSection {
         contents.add(content);
     }
 
-    public List<String> getListContent() {
+    public List<String> getList() {
         return contents;
     }
 
     @Override
-    public String getContents() {
+    public String getContents(String separator) {
         StringBuilder sb = new StringBuilder();
-        contents.forEach(content -> sb.append(content).append("\n"));
+        contents.forEach(content -> sb.append(content).append(separator));
         return sb.toString();
+    }
+
+    @Override
+    public String getContents() {
+        return getContents("");
     }
 
     @Override

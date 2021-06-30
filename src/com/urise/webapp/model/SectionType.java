@@ -8,10 +8,18 @@ public enum SectionType {
     EXPERIENCE("Опыт работы"),
     EDUCATION("Образование");
 
-    private String title;
+    private final String title;
 
     SectionType(String title) {
         this.title = title;
+    }
+
+    public static String getType(SectionType type){
+        return switch (type) {
+            case PERSONAL, OBJECTIVE -> "TEXT";
+            case ACHIEVEMENT, QUALIFICATIONS -> "LIST";
+            case EXPERIENCE, EDUCATION -> "MULTI";
+        };
     }
 
     public String getTitle() {

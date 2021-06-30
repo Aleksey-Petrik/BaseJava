@@ -21,26 +21,36 @@ public class ListOrganizationSection extends AbstractSection {
     public ListOrganizationSection() {
     }
 
+    public List<Organization> getList() {
+        return organizations;
+    }
+
     public void addOrganization(Organization organization) {
         organizations.add(organization);
     }
 
     @Override
-    public String getContents() {
+    public String getContents(String separator) {
         StringBuilder sb = new StringBuilder();
         for (Organization org : organizations) {
-            sb.append(org.getOrganization().getName()).append(" ").
-                    append(org.getOrganization().getUrl()).
-                    append("\n");
+            sb.append(separator)
+                    .append(org.getOrganization().getName())
+                    .append("--")
+                    .append(org.getOrganization().getUrl());
 
-            org.getPeriods().forEach(period -> sb.append(DateUtil.format(period.getDateBegin(), MASK_FOR_PRINT_PERIOD)).
-                    append("-").
-                    append(DateUtil.format(period.getDateEnd(), MASK_FOR_PRINT_PERIOD)).
-                    append(" ").
-                    append(period.getContent()).
-                    append("\n"));
+            org.getPeriods().forEach(period -> sb.append("--")
+                    .append(DateUtil.format(period.getDateBegin(), MASK_FOR_PRINT_PERIOD))
+                    .append("-")
+                    .append(DateUtil.format(period.getDateEnd(), MASK_FOR_PRINT_PERIOD))
+                    .append("--")
+                    .append(period.getContent()));
         }
         return sb.toString();
+    }
+
+    @Override
+    public String getContents() {
+        return getContents("");
     }
 
     @Override

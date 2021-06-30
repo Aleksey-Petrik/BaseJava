@@ -36,60 +36,59 @@ public class ResumeTestData {
     private static void addAchievementAndQualifications(Resume resume) {
         ListTextSection sectionAchievement = new ListTextSection();
 
-        sectionAchievement.addContent("""
-                + С 2013 года: разработка проектов "Разработка Web приложения","Java Enterprise", \s
-                "Многомодульный maven. Многопоточность. XML (JAXB/StAX). Веб сервисы (JAX-RS/SOAP).\s
-                Удаленное взаимодействие (JMS/AKKA)". Организация онлайн стажировок и ведение проектов.\s
-                Более 1000 выпускников.""");
-        sectionAchievement.addContent("+ Реализация двухфакторной аутентификации для онлайн платформы управления проектами Wrike. \n" +
+        sectionAchievement.addContent(
+                "С 2013 года: разработка проектов \"Разработка Web приложения\",\"Java Enterprise\", " +
+                        "Многомодульный maven. Многопоточность. XML (JAXB/StAX). Веб сервисы (JAX-RS/SOAP). " +
+                        "Удаленное взаимодействие (JMS/AKKA). Организация онлайн стажировок и ведение проектов. " +
+                        "Более 1000 выпускников.");
+        sectionAchievement.addContent("Реализация двухфакторной аутентификации для онлайн платформы управления проектами Wrike. " +
                 "Интеграция с Twilio, DuoSecurity, Google Authenticator, Jira, Zendesk.");
-        sectionAchievement.addContent("""
-                + Налаживание процесса разработки и непрерывной интеграции ERP системы River BPM.\s
-                Интеграция с 1С, Bonita BPM, CMIS, LDAP. Разработка приложения управления окружением на стеке:\s
-                Scala/Play/Anorm/JQuery. Разработка SSO аутентификации и авторизации различных ERP модулей,\s
-                интеграция CIFS/SMB java сервера.""");
-        sectionAchievement.addContent("""
-                + Реализация c нуля Rich Internet Application приложения на стеке технологий JPA, Spring, \s +
-                Spring-MVC, GWT, ExtGWT (GXT), Commet, HTML5, Highstock для алгоритмического трейдинга.""");
-        sectionAchievement.addContent("""
-                + Создание JavaEE фреймворка для отказоустойчивого взаимодействия слабо-связанных сервисов\s
-                (SOA-base архитектура, JAX-WS, JMS, AS Glassfish). Сбор статистики сервисов и информации о состоянии\s
-                через систему мониторинга Nagios. Реализация онлайн клиента для администрирования и мониторинга\s
-                системы по JMX (Jython/ Django).""");
-        sectionAchievement.addContent("+ Реализация протоколов по приему платежей всех основных платежных системы России \n" +
+        sectionAchievement.addContent(
+                "Налаживание процесса разработки и непрерывной интеграции ERP системы River BPM. " +
+                        "Интеграция с 1С, Bonita BPM, CMIS, LDAP. Разработка приложения управления окружением на стеке: " +
+                        "Scala/Play/Anorm/JQuery. Разработка SSO аутентификации и авторизации различных ERP модулей, " +
+                        "интеграция CIFS/SMB java сервера.");
+        sectionAchievement.addContent(
+                "Реализация c нуля Rich Internet Application приложения на стеке технологий JPA, Spring, " +
+                        "Spring-MVC, GWT, ExtGWT (GXT), Commet, HTML5, Highstock для алгоритмического трейдинга.");
+        sectionAchievement.addContent(
+                "Создание JavaEE фреймворка для отказоустойчивого взаимодействия слабо-связанных сервисов " +
+                        "(SOA-base архитектура, JAX-WS, JMS, AS Glassfish). Сбор статистики сервисов и информации о состоянии " +
+                        "через систему мониторинга Nagios. Реализация онлайн клиента для администрирования и мониторинга " +
+                        "системы по JMX (Jython/ Django).");
+        sectionAchievement.addContent("Реализация протоколов по приему платежей всех основных платежных системы России " +
                 "(Cyberplat, Eport, Chronopay, Сбербанк), Белоруcсии(Erip, Osmp) и Никарагуа.");
 
         resume.addSection(SectionType.ACHIEVEMENT, sectionAchievement);
 
         ListTextSection sectionQualifications = new ListTextSection();
 
-        sectionQualifications.addContent("+ JEE AS: GlassFish (v2.1, v3), OC4J, JBoss, Tomcat, Jetty, WebLogic, WSO2");
-        sectionQualifications.addContent("+ Version control: Subversion, Git, Mercury, ClearCase, Perforce");
-        sectionQualifications.addContent("+ DB: PostgreSQL(наследование, pgplsql, PL/Python), Redis (Jedis), H2, Oracle,");
-        sectionQualifications.addContent("+ MySQL, SQLite, MS SQL, HSQLDB");
-        sectionQualifications.addContent("+ Languages: Java, Scala, Python/Jython/PL-Python, JavaScript, Groovy,");
-        sectionQualifications.addContent("+ XML/XSD/XSLT, SQL, C/C++, Unix shell scripts,");
-        sectionQualifications.addContent("""
-                + Java Frameworks: Java 8 (Time API, Streams), Guava, Java Executor, MyBatis,\s
-                Spring (MVC, Security, Data, Clouds, Boot), JPA (Hibernate, EclipseLink), Guice,\s
-                GWT(SmartGWT, ExtGWT/GXT), Vaadin, Jasperreports, Apache Commons, Eclipse SWT, JUnit,\s
-                Selenium (htmlelements).""");
-        sectionQualifications.addContent("+ Python: Django.");
-        sectionQualifications.addContent("+ JavaScript: jQuery, ExtJS, Bootstrap.js, underscore.js");
-        sectionQualifications.addContent("+ Scala: SBT, Play2, Specs2, Anorm, Spray, Akka");
-        sectionQualifications.addContent("""
-                + Технологии: Servlet, JSP/JSTL, JAX-WS, REST, EJB, RMI, JMS, JavaMail, JAXB, StAX, SAX,\s
-                DOM, XSLT, MDB, JMX, JDBC, JPA, JNDI, JAAS, SOAP, AJAX, Commet, HTML5, ESB, CMIS, BPMN2, LDAP,\s
-                OAuth1, OAuth2, JWT.""");
-        sectionQualifications.addContent("+ Инструменты: Maven + plugin development, Gradle, настройка Ngnix.");
-        sectionQualifications.addContent("+ администрирование Hudson/Jenkins, Ant + custom task, SoapUI, JPublisher, Flyway, Nagios, \n" +
+        sectionQualifications.addContent("JEE AS: GlassFish (v2.1, v3), OC4J, JBoss, Tomcat, Jetty, WebLogic, WSO2");
+        sectionQualifications.addContent("Version control: Subversion, Git, Mercury, ClearCase, Perforce");
+        sectionQualifications.addContent("DB: PostgreSQL(наследование, pgplsql, PL/Python), Redis (Jedis), H2, Oracle,");
+        sectionQualifications.addContent("MySQL, SQLite, MS SQL, HSQLDB");
+        sectionQualifications.addContent("Languages: Java, Scala, Python/Jython/PL-Python, JavaScript, Groovy,");
+        sectionQualifications.addContent("XML/XSD/XSLT, SQL, C/C++, Unix shell scripts,");
+        sectionQualifications.addContent(
+                "Java Frameworks: Java 8 (Time API, Streams), Guava, Java Executor, MyBatis, " +
+                        "Spring (MVC, Security, Data, Clouds, Boot), JPA (Hibernate, EclipseLink), Guice, " +
+                        "GWT(SmartGWT, ExtGWT/GXT), Vaadin, Jasperreports, Apache Commons, Eclipse SWT, JUnit, " +
+                        "Selenium (htmlelements).");
+        sectionQualifications.addContent("Python: Django.");
+        sectionQualifications.addContent("JavaScript: jQuery, ExtJS, Bootstrap.js, underscore.js");
+        sectionQualifications.addContent("Scala: SBT, Play2, Specs2, Anorm, Spray, Akka");
+        sectionQualifications.addContent(
+                "Технологии: Servlet, JSP/JSTL, JAX-WS, REST, EJB, RMI, JMS, JavaMail, JAXB, StAX, SAX, " +
+                        "DOM, XSLT, MDB, JMX, JDBC, JPA, JNDI, JAAS, SOAP, AJAX, Commet, HTML5, ESB, CMIS, BPMN2, LDAP, " +
+                        "OAuth1, OAuth2, JWT.");
+        sectionQualifications.addContent("Инструменты: Maven + plugin development, Gradle, настройка Ngnix.");
+        sectionQualifications.addContent("Администрирование Hudson/Jenkins, Ant + custom task, SoapUI, JPublisher, Flyway, Nagios, " +
                 "iReport, OpenCmis, Bonita, pgBouncer.");
-        sectionQualifications.addContent("+ Отличное знание и опыт применения концепций ООП, SOA, шаблонов проектрирования, \n" +
+        sectionQualifications.addContent("Отличное знание и опыт применения концепций ООП, SOA, шаблонов проектрирования, " +
                 "архитектурных шаблонов, UML, функционального программирования");
-        sectionQualifications.addContent("+ Родной русский, английский \"upper intermediate\"");
+        sectionQualifications.addContent("Родной русский, английский \"upper intermediate\"");
 
         resume.addSection(SectionType.QUALIFICATIONS, sectionQualifications);
-
     }
 
     private static void addExperienceAndEducation(Resume resume) {
@@ -97,64 +96,69 @@ public class ResumeTestData {
 
         Organization organization = new Organization(new Link("Java Online Projects", "http://javaops.ru/"));
         organization.addPeriod(
-                DateUtil.of(2013, 10),
+                DateUtil.of(2016, 11),
                 _NOW_,
-                "Автор проекта.\n" +
+                "Автор проекта. " +
+                        "Создание, организация и проведение Java онлайн проектов и стажировок.");
+        organization.addPeriod(
+                DateUtil.of(2013, 10),
+                DateUtil.of(2016, 10),
+                "Автор проекта. " +
                         "Создание, организация и проведение Java онлайн проектов и стажировок.");
         organizationsExperience.addOrganization(organization);
 
         organization = new Organization(new Link("Wrike", "https://www.wrike.com/"));
-        organization.addPeriod(DateUtil.of(2014, 10), DateUtil.of(2016, 1), """
-                Старший разработчик (backend)
-                Проектирование и разработка онлайн платформы управления проектами Wrike (Java 8 API, Maven, Spring,\s
-                MyBatis, Guava, Vaadin, PostgreSQL, Redis). Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO.""");
+        organization.addPeriod(DateUtil.of(2014, 10), DateUtil.of(2016, 1),
+                "Старший разработчик (backend) " +
+                        "Проектирование и разработка онлайн платформы управления проектами Wrike (Java 8 API, Maven, Spring, " +
+                        "MyBatis, Guava, Vaadin, PostgreSQL, Redis). Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO.");
         organizationsExperience.addOrganization(organization);
 
         organization = new Organization(new Link("RIT Center", ""));
-        organization.addPeriod(DateUtil.of(2012, 4), DateUtil.of(2014, 10), """
-                Java архитектор
-                Организация процесса разработки системы ERP для разных окружений: релизная политика, версионирование,\s
-                ведение CI (Jenkins), миграция базы (кастомизация Flyway), конфигурирование системы (pgBoucer, Nginx),\s
-                AAA via SSO. Архитектура БД и серверной части системы. Разработка интергационных сервисов: CMIS, BPMN2,\s
-                1C (WebServices), сервисов общего назначения (почта, экспорт в pdf, doc, html).\s
-                Интеграция Alfresco JLAN для online редактирование из браузера документов MS Office.\s
-                Maven + plugin development, Ant, Apache Commons, Spring security, Spring MVC, Tomcat,WSO2, xcmis,\s
-                OpenCmis, Bonita, Python scripting, Unix shell remote scripting via ssh tunnels, PL/Python""");
+        organization.addPeriod(DateUtil.of(2012, 4), DateUtil.of(2014, 10),
+                "Java архитектор " +
+                        "Организация процесса разработки системы ERP для разных окружений: релизная политика, версионирование, " +
+                        "ведение CI (Jenkins), миграция базы (кастомизация Flyway), конфигурирование системы (pgBoucer, Nginx), " +
+                        "AAA via SSO. Архитектура БД и серверной части системы. Разработка интергационных сервисов: CMIS, BPMN2, " +
+                        "1C (WebServices), сервисов общего назначения (почта, экспорт в pdf, doc, html). " +
+                        "Интеграция Alfresco JLAN для online редактирование из браузера документов MS Office. " +
+                        "Maven + plugin development, Ant, Apache Commons, Spring security, Spring MVC, Tomcat,WSO2, xcmis, " +
+                        "OpenCmis, Bonita, Python scripting, Unix shell remote scripting via ssh tunnels, PL/Python");
         organizationsExperience.addOrganization(organization);
 
         organization = new Organization(new Link("Luxoft (Deutsche Bank)", "http://www.luxoft.ru/"));
-        organization.addPeriod(DateUtil.of(2010, 12), DateUtil.of(2012, 4), """
-                Ведущий программист
-                Участие в проекте Deutsche Bank CRM (WebLogic, Hibernate, Spring, Spring MVC, SmartGWT, GWT, Jasper,\s
-                Oracle). Реализация клиентской и серверной части CRM. Реализация RIA-приложения для администрирования,\s
-                мониторинга и анализа результатов в области алгоритмического трейдинга. JPA, Spring, Spring-MVC, GWT,\s
-                ExtGWT (GXT), Highstock, Commet, HTML5.""");
+        organization.addPeriod(DateUtil.of(2010, 12), DateUtil.of(2012, 4),
+                "Ведущий программист " +
+                        "Участие в проекте Deutsche Bank CRM (WebLogic, Hibernate, Spring, Spring MVC, SmartGWT, GWT, Jasper, " +
+                        "Oracle). Реализация клиентской и серверной части CRM. Реализация RIA-приложения для администрирования, " +
+                        "мониторинга и анализа результатов в области алгоритмического трейдинга. JPA, Spring, Spring-MVC, GWT, " +
+                        "ExtGWT (GXT), Highstock, Commet, HTML5.");
         organizationsExperience.addOrganization(organization);
 
         organization = new Organization(new Link("Yota", "https://www.yota.ru/"));
-        organization.addPeriod(DateUtil.of(2008, 6), DateUtil.of(2010, 12), """
-                Ведущий специалист
-                Дизайн и имплементация Java EE фреймворка для отдела "Платежные Системы" (GlassFish v2.1, v3, OC4J,\s
-                EJB3, JAX-WS RI 2.1, Servlet 2.4, JSP, JMX, JMS, Maven2). Реализация администрирования, статистики и\s
-                мониторинга фреймворка. Разработка online JMX клиента (Python/ Jython, Django, ExtJS)""");
+        organization.addPeriod(DateUtil.of(2008, 6), DateUtil.of(2010, 12),
+                "Ведущий специалист " +
+                        "Дизайн и имплементация Java EE фреймворка для отдела \"Платежные Системы\" (GlassFish v2.1, v3, OC4J, " +
+                        "EJB3, JAX-WS RI 2.1, Servlet 2.4, JSP, JMX, JMS, Maven2). Реализация администрирования, статистики и " +
+                        "мониторинга фреймворка. Разработка online JMX клиента (Python/ Jython, Django, ExtJS)");
         organizationsExperience.addOrganization(organization);
 
         organization = new Organization(new Link("Enkata", "http://enkata.com/"));
-        organization.addPeriod(DateUtil.of(2007, 3), DateUtil.of(2008, 6), """
-                Разработчик ПО
-                Реализация клиентской (Eclipse RCP) и серверной (JBoss 4.2, Hibernate 3.0, Tomcat, JMS) частей\s
-                кластерного J2EE приложения (OLAP, Data mining).""");
+        organization.addPeriod(DateUtil.of(2007, 3), DateUtil.of(2008, 6),
+                "Разработчик ПО " +
+                        "Реализация клиентской (Eclipse RCP) и серверной (JBoss 4.2, Hibernate 3.0, Tomcat, JMS) частей " +
+                        "кластерного J2EE приложения (OLAP, Data mining).");
         organizationsExperience.addOrganization(organization);
 
         organization = new Organization(new Link("Siemens AG", "https://www.siemens.com/ru/ru/home.html"));
-        organization.addPeriod(DateUtil.of(2005, 1), DateUtil.of(2007, 2), """
-                Разработчик ПО
-                Разработка информационной модели, проектирование интерфейсов, реализация и отладка ПО на мобильной IN\s
-                платформе Siemens @vantage (Java, Unix).""");
+        organization.addPeriod(DateUtil.of(2005, 1), DateUtil.of(2007, 2),
+                "Разработчик ПО " +
+                        "Разработка информационной модели, проектирование интерфейсов, реализация и отладка ПО на мобильной IN " +
+                        "платформе Siemens @vantage (Java, Unix).");
         organizationsExperience.addOrganization(organization);
 
         organization = new Organization(new Link("Alcatel", "http://www.alcatel.ru/"));
-        organization.addPeriod(DateUtil.of(1997, 9), DateUtil.of(2005, 1), "Инженер по аппаратному и программному тестированию\n" +
+        organization.addPeriod(DateUtil.of(1997, 9), DateUtil.of(2005, 1), "Инженер по аппаратному и программному тестированию " +
                 "Тестирование, отладка, внедрение ПО цифровой телефонной станции Alcatel 1000 S12 (CHILL, ASM).");
         organizationsExperience.addOrganization(organization);
 
@@ -178,7 +182,7 @@ public class ResumeTestData {
         organization.addPeriod(DateUtil.of(1997, 9), DateUtil.of(1998, 3), "6 месяцев обучения цифровым телефонным сетям (Москва)");
         organizationsEducation.addOrganization(organization);
 
-        organization = new Organization(new Link("Санкт-Петербургский национальный исследовательский \n" +
+        organization = new Organization(new Link("Санкт-Петербургский национальный исследовательский " +
                 "университет информационных технологий, механики и оптики", "http://www.ifmo.ru/"));
         organization.addPeriod(DateUtil.of(1993, 9), DateUtil.of(1996, 7), "Аспирантура (программист С, С++)");
         organization.addPeriod(DateUtil.of(1987, 9), DateUtil.of(1993, 7), "Инженер (программист Fortran, C)");

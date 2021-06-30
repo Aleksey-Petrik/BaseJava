@@ -3,6 +3,8 @@ package com.urise.webapp.model;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import java.io.Serial;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -19,8 +21,19 @@ public class TextSection extends AbstractSection {
         this.content = content;
     }
 
+    @Override
+    public List<String> getList() {
+        return Collections.singletonList(getContents());
+    }
+
+    @Override
+    public String getContents(String separator) {
+        return content + separator;
+    }
+
+    @Override
     public String getContents() {
-        return content;
+        return getContents("");
     }
 
     @Override
