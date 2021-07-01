@@ -30,27 +30,20 @@ public class ListOrganizationSection extends AbstractSection {
     }
 
     @Override
-    public String getContents(String separator) {
+    public String getContents() {
         StringBuilder sb = new StringBuilder();
         for (Organization org : organizations) {
-            sb.append(separator)
-                    .append(org.getOrganization().getName())
+            sb.append(org.getOrganization().getName())
                     .append("--")
                     .append(org.getOrganization().getUrl());
 
-            org.getPeriods().forEach(period -> sb.append("--")
+            org.getPeriods().forEach(period -> sb
                     .append(DateUtil.format(period.getDateBegin(), MASK_FOR_PRINT_PERIOD))
                     .append("-")
                     .append(DateUtil.format(period.getDateEnd(), MASK_FOR_PRINT_PERIOD))
-                    .append("--")
                     .append(period.getContent()));
         }
         return sb.toString();
-    }
-
-    @Override
-    public String getContents() {
-        return getContents("");
     }
 
     @Override

@@ -2,124 +2,117 @@ package com.urise.webapp.storage.serialize;
 
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.*;
-import com.urise.webapp.util.DateUtil;
 
 import java.io.*;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
 
 public class DataStreamStorageSerializer implements StreamSerialize {
-    private final String PREFIX_SECTION = "SECTION";
-    private final String SEPARATOR = "::";
-
-    private void write(String line, DataOutputStream dos) {
-        try {
-            dos.writeUTF(line);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private boolean isSection(String line) {
-        return PREFIX_SECTION.equals(line);
-    }
-
-    private boolean checkSectionType(String line) {
-        for (SectionType section : SectionType.values()) {
-            if (section.toString().equals(line)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private String[] split(String line, String separator) {
-        return line.split(separator);
-    }
 
     @Override
-    public Resume doRead(InputStream is) {
+    public Resume doRead(InputStream is) throws IOException {
         try (DataInputStream ois = new DataInputStream(is)) {
-
-            Resume resume = null;
-            String sectionName = null;
-            ListOrganizationSection organizations;
+            //PersonalData
+            String uuid = ois.readUTF();
+            String fullName = ois.readUTF();
+            Resume resume = new Resume(uuid, fullName);
+            //Contacts
+            int size = ois.readInt();
+            for (int i = 0; i < size; i++) {
+                resume.addContact(ContactsType.valueOf(ois.readUTF()), ois.readUTF());
+            }
 
             while (ois.available() > 0) {
-                String[] lines = split(ois.readUTF(), SEPARATOR);
+                AbstractSection sectionObject = null;
 
-                if (isSection(lines[0])) {
-                    sectionName = lines[1];
-                    continue;
-                }
+                SectionType sectionType = SectionType.valueOf(ois.readUTF());
+                size = ois.readInt();
 
-                if (sectionName.equals("PersonalData")) {
-                    resume = new Resume(lines[1], lines[2]);
-                    continue;
-                }
-
-                if (resume != null) {
-                    if (sectionName.equals("Contacts")) {
-                        resume.addContact(ContactsType.valueOf(lines[0]), lines[1]);
-                        continue;
+                switch (sectionType) {
+                    case PERSONAL, OBJECTIVE -> sectionObject = new TextSection(ois.readUTF());
+                    case ACHIEVEMENT, QUALIFICATIONS -> {
+                        ListTextSection listTextSection = new ListTextSection();
+                        for (int i = 0; i < size; i++) {
+                            listTextSection.addContent(ois.readUTF());
+                        }
+                        sectionObject = listTextSection;
                     }
-
-                    if (checkSectionType(sectionName)) {
-                        SectionType sectionType = SectionType.valueOf(sectionName);
-
-                        if ("TEXT".equals(SectionType.getType(sectionType))) {
-                            resume.addSection(sectionType, new TextSection(lines[0]));
-                            continue;
-                        }
-
-                        if ("LIST".equals(SectionType.getType(sectionType))) {
-                            ListTextSection listTextSection = new ListTextSection();
-                            for (String line : lines) {
-                                if (!line.isEmpty()) {
-                                    listTextSection.addContent(line);
-                                }
+                    case EXPERIENCE, EDUCATION -> {
+                        ListOrganizationSection organizations = new ListOrganizationSection();
+                        for (int i = 0; i < size; i++) {
+                            Organization organization = new Organization(new Link(ois.readUTF(), ois.readUTF()));
+                            int sizePeriods = ois.readInt();
+                            for (int j = 0; j < sizePeriods; j++) {
+                                organization.addPeriod(LocalDate.parse(ois.readUTF()),
+                                        LocalDate.parse(ois.readUTF()), ois.readUTF());
                             }
-                            resume.addSection(sectionType, listTextSection);
-                            continue;
+                            organizations.addOrganization(organization);
                         }
-
-                        if ("MULTI".equals(SectionType.getType(sectionType))) {
-                            organizations = new ListOrganizationSection();
-                            for (String line : lines) {
-                                if (!line.isEmpty()) {
-                                    String[] lineData = split(line, "--");
-                                    Organization organization = new Organization(new Link(lineData[0], lineData[1]));
-                                    for (int i = 2; i < lineData.length; i += 2) {
-                                        String[] period = split(lineData[i], "-");
-                                        organization.addPeriod(
-                                                DateUtil.parse(period[0]),
-                                                DateUtil.parse(period[1]),
-                                                lineData[i + 1]);
-                                    }
-                                    organizations.addOrganization(organization);
-                                }
-                            }
-                            resume.addSection(sectionType, organizations);
-                        }
+                        sectionObject = organizations;
                     }
                 }
+                resume.addSection(sectionType, sectionObject);
             }
             return resume;
-        } catch (IOException e) {
-            throw new StorageException(null, "DataStream error read file-resume", e);
         }
     }
 
     @Override
     public void doWrite(Resume r, OutputStream os) throws IOException {
         try (DataOutputStream dos = new DataOutputStream(os)) {
-            write(PREFIX_SECTION + SEPARATOR + "PersonalData", dos);
-            write(SEPARATOR + r.getUuid() + SEPARATOR + r.getFullName(), dos);
-
-            write(PREFIX_SECTION + SEPARATOR + "Contacts", dos);
-            r.getContacts().forEach((k, v) -> write(k.toString() + SEPARATOR + v, dos));
+            //PersonalData
+            dos.writeUTF(r.getUuid());
+            dos.writeUTF(r.getFullName());
+            //Contacts
+            Map<ContactsType, String> contacts = r.getContacts();
+            dos.writeInt(contacts.size());
+            r.getContacts().forEach((k, v) -> {
+                try {
+                    dos.writeUTF(k.toString());
+                    dos.writeUTF(v);
+                } catch (IOException e) {
+                    throw new StorageException(null, "DataStream error write file-resume", e);
+                }
+            });
 
             r.getSections().forEach((k, v) -> {
-                write(PREFIX_SECTION + SEPARATOR + k.toString(), dos);
-                write(v.getContents(SEPARATOR), dos);
+                try {
+                    dos.writeUTF(k.toString());
+                    List<?> sectionList = v.getList();
+                    dos.writeInt(sectionList.size());
+                    sectionList.forEach(content -> {
+                        try {
+                            SectionType sectionType = SectionType.valueOf(k.toString());
+                            if (sectionType == SectionType.EDUCATION ||
+                                    sectionType == SectionType.EXPERIENCE) {
+                                Organization organization = (Organization) content;
+
+                                dos.writeUTF(organization.getOrganization().getName());
+                                dos.writeUTF(organization.getOrganization().getUrl());
+
+                                List<Organization.Period> periods = organization.getPeriods();
+
+                                dos.writeInt(periods.size());
+                                periods.forEach(period -> {
+                                    try {
+                                        dos.writeUTF(period.getDateBegin().toString());
+                                        dos.writeUTF(period.getDateEnd().toString());
+                                        dos.writeUTF(period.getContent());
+                                    } catch (IOException e) {
+                                        throw new StorageException(null, "DataStream error write file-resume", e);
+                                    }
+                                });
+                            } else {
+                                dos.writeUTF(content.toString());
+                            }
+                        } catch (IOException e) {
+                            throw new StorageException(null, "DataStream error write file-resume", e);
+                        }
+                    });
+                } catch (IOException e) {
+                    throw new StorageException(null, "DataStream error wrute file-resume", e);
+                }
             });
         }
     }

@@ -27,13 +27,8 @@ public class TextSection extends AbstractSection {
     }
 
     @Override
-    public String getContents(String separator) {
-        return content + separator;
-    }
-
-    @Override
     public String getContents() {
-        return getContents("");
+        return content;
     }
 
     @Override

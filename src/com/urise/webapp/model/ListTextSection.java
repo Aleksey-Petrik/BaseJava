@@ -26,15 +26,10 @@ public class ListTextSection extends AbstractSection {
     }
 
     @Override
-    public String getContents(String separator) {
-        StringBuilder sb = new StringBuilder();
-        contents.forEach(content -> sb.append(content).append(separator));
-        return sb.toString();
-    }
-
-    @Override
     public String getContents() {
-        return getContents("");
+        StringBuilder sb = new StringBuilder();
+        contents.forEach(sb::append);
+        return sb.toString();
     }
 
     @Override

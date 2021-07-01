@@ -50,6 +50,6 @@ public class Link implements Serializable {
     public String toString() {
         return name +
                 " " +
-                url + "\n";
+                url;
     }
 }

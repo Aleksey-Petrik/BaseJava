@@ -9,7 +9,5 @@ import java.util.List;
 public abstract class AbstractSection implements Serializable {
     public abstract String getContents();
 
-    public abstract String getContents(String separator);
-
     public abstract List<?> getList();
 }
