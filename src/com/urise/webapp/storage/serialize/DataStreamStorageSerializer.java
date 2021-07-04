@@ -18,29 +18,29 @@ public class DataStreamStorageSerializer implements StreamSerialize {
             String fullName = ois.readUTF();
             Resume resume = new Resume(uuid, fullName);
             //Contacts
-            int size = ois.readInt();
-            for (int i = 0; i < size; i++) {
+            int sizeSection = ois.readInt();
+            for (int i = 0; i < sizeSection; i++) {
                 resume.addContact(ContactsType.valueOf(ois.readUTF()), ois.readUTF());
             }
-
-            while (ois.available() > 0) {
+            sizeSection = ois.readInt();
+            for (int i = 0; i < sizeSection; i++) {
                 AbstractSection sectionObject = null;
 
                 SectionType sectionType = SectionType.valueOf(ois.readUTF());
-                size = ois.readInt();
-
                 switch (sectionType) {
                     case PERSONAL, OBJECTIVE -> sectionObject = new TextSection(ois.readUTF());
                     case ACHIEVEMENT, QUALIFICATIONS -> {
                         ListTextSection listTextSection = new ListTextSection();
-                        for (int i = 0; i < size; i++) {
+                        int size = ois.readInt();
+                        for (int j = 0; j < size; j++) {
                             listTextSection.addContent(ois.readUTF());
                         }
                         sectionObject = listTextSection;
                     }
                     case EXPERIENCE, EDUCATION -> {
                         ListOrganizationSection organizations = new ListOrganizationSection();
-                        for (int i = 0; i < size; i++) {
+                        int size = ois.readInt();
+                        for (int k = 0; k < size; k++) {
                             Organization organization = new Organization(new Link(ois.readUTF(), ois.readUTF()));
                             int sizePeriods = ois.readInt();
                             for (int j = 0; j < sizePeriods; j++) {
@@ -75,43 +75,51 @@ public class DataStreamStorageSerializer implements StreamSerialize {
                     throw new StorageException(null, "DataStream error write file-resume", e);
                 }
             });
-
-            r.getSections().forEach((k, v) -> {
+            //Sections
+            Map<SectionType, AbstractSection> sections = r.getSections();
+            dos.writeInt(sections.size());
+            sections.forEach((k, v) -> {
                 try {
-                    dos.writeUTF(k.toString());
-                    List<?> sectionList = v.getList();
-                    dos.writeInt(sectionList.size());
-                    sectionList.forEach(content -> {
-                        try {
-                            SectionType sectionType = SectionType.valueOf(k.toString());
-                            if (sectionType == SectionType.EDUCATION ||
-                                    sectionType == SectionType.EXPERIENCE) {
-                                Organization organization = (Organization) content;
-
-                                dos.writeUTF(organization.getOrganization().getName());
-                                dos.writeUTF(organization.getOrganization().getUrl());
-
-                                List<Organization.Period> periods = organization.getPeriods();
-
-                                dos.writeInt(periods.size());
-                                periods.forEach(period -> {
-                                    try {
-                                        dos.writeUTF(period.getDateBegin().toString());
-                                        dos.writeUTF(period.getDateEnd().toString());
-                                        dos.writeUTF(period.getContent());
-                                    } catch (IOException e) {
-                                        throw new StorageException(null, "DataStream error write file-resume", e);
-                                    }
-                                });
-                            } else {
-                                dos.writeUTF(content.toString());
-                            }
-                        } catch (IOException e) {
-                            throw new StorageException(null, "DataStream error write file-resume", e);
+                    dos.writeUTF(k.name());
+                    switch (k) {
+                        case PERSONAL, OBJECTIVE -> dos.writeUTF(v.getContents());
+                        case ACHIEVEMENT, QUALIFICATIONS -> {
+                            List<String> contentList = ((ListTextSection) v).getList();
+                            dos.writeInt(contentList.size());
+                            contentList.forEach(content -> {
+                                try {
+                                    dos.writeUTF(content);
+                                } catch (IOException e) {
+                                    throw new StorageException(null, "DataStream error write file-resume", e);
+                                }
+                            });
                         }
-                    });
+                        case EDUCATION, EXPERIENCE -> {
+                            List<Organization> organizationList = ((ListOrganizationSection) v).getList();
+                            dos.writeInt(organizationList.size());
+                            organizationList.forEach(org -> {
+                                try {
+                                    dos.writeUTF(org.getOrganization().getName());
+                                    dos.writeUTF(org.getOrganization().getUrl());
+                                    List<Organization.Period> periods = org.getPeriods();
+                                    dos.writeInt(periods.size());
+                                    periods.forEach(period -> {
+                                        try {
+                                            dos.writeUTF(period.getDateBegin().toString());
+                                            dos.writeUTF(period.getDateEnd().toString());
+                                            dos.writeUTF(period.getContent());
+                                        } catch (IOException e) {
+                                            throw new StorageException(null, "DataStream error write file-resume", e);
+                                        }
+                                    });
+                                } catch (IOException e) {
+                                    throw new StorageException(null, "DataStream error write file-resume", e);
+                                }
+                            });
+                        }
+                    }
                 } catch (IOException e) {
-                    throw new StorageException(null, "DataStream error wrute file-resume", e);
+                    throw new StorageException(null, "DataStream error write file-resume", e);
                 }
             });
         }
