@@ -1,59 +1,46 @@
 package com.urise.webapp.storage.serialize;
 
-import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.*;
 
 import java.io.*;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class DataStreamStorageSerializer implements StreamSerialize {
 
     @Override
     public Resume doRead(InputStream is) throws IOException {
-        try (DataInputStream ois = new DataInputStream(is)) {
+        try (DataInputStream dis = new DataInputStream(is)) {
             //PersonalData
-            String uuid = ois.readUTF();
-            String fullName = ois.readUTF();
+            String uuid = dis.readUTF();
+            String fullName = dis.readUTF();
             Resume resume = new Resume(uuid, fullName);
             //Contacts
-            int sizeSection = ois.readInt();
-            for (int i = 0; i < sizeSection; i++) {
-                resume.addContact(ContactsType.valueOf(ois.readUTF()), ois.readUTF());
-            }
-            sizeSection = ois.readInt();
-            for (int i = 0; i < sizeSection; i++) {
+            reader(dis, () -> resume.addContact(ContactsType.valueOf(dis.readUTF()), dis.readUTF()));
+            //Sections
+            reader(dis, () -> {
+                SectionType sectionType = SectionType.valueOf(dis.readUTF());
                 AbstractSection sectionObject = null;
-
-                SectionType sectionType = SectionType.valueOf(ois.readUTF());
                 switch (sectionType) {
-                    case PERSONAL, OBJECTIVE -> sectionObject = new TextSection(ois.readUTF());
+                    case PERSONAL, OBJECTIVE -> sectionObject = new TextSection(dis.readUTF());
                     case ACHIEVEMENT, QUALIFICATIONS -> {
                         ListTextSection listTextSection = new ListTextSection();
-                        int size = ois.readInt();
-                        for (int j = 0; j < size; j++) {
-                            listTextSection.addContent(ois.readUTF());
-                        }
+                        reader(dis, () -> listTextSection.addContent(dis.readUTF()));
                         sectionObject = listTextSection;
                     }
                     case EXPERIENCE, EDUCATION -> {
                         ListOrganizationSection organizations = new ListOrganizationSection();
-                        int size = ois.readInt();
-                        for (int k = 0; k < size; k++) {
-                            Organization organization = new Organization(new Link(ois.readUTF(), ois.readUTF()));
-                            int sizePeriods = ois.readInt();
-                            for (int j = 0; j < sizePeriods; j++) {
-                                organization.addPeriod(LocalDate.parse(ois.readUTF()),
-                                        LocalDate.parse(ois.readUTF()), ois.readUTF());
-                            }
+                        reader(dis, () -> {
+                            Organization organization = new Organization(new Link(dis.readUTF(), dis.readUTF()));
+                            reader(dis, () -> organization.addPeriod(LocalDate.parse(dis.readUTF()),
+                                    LocalDate.parse(dis.readUTF()), dis.readUTF()));
                             organizations.addOrganization(organization);
-                        }
+                        });
                         sectionObject = organizations;
                     }
                 }
                 resume.addSection(sectionType, sectionObject);
-            }
+            });
             return resume;
         }
     }
@@ -66,62 +53,56 @@ public class DataStreamStorageSerializer implements StreamSerialize {
             dos.writeUTF(r.getFullName());
             //Contacts
             Map<ContactsType, String> contacts = r.getContacts();
-            dos.writeInt(contacts.size());
-            r.getContacts().forEach((k, v) -> {
-                try {
-                    dos.writeUTF(k.toString());
-                    dos.writeUTF(v);
-                } catch (IOException e) {
-                    throw new StorageException(null, "DataStream error write file-resume", e);
-                }
+            writeCollections(dos, contacts.entrySet(), contact -> {
+                dos.writeUTF(contact.getKey().name());
+                dos.writeUTF(contact.getValue());
             });
             //Sections
             Map<SectionType, AbstractSection> sections = r.getSections();
-            dos.writeInt(sections.size());
-            sections.forEach((k, v) -> {
-                try {
-                    dos.writeUTF(k.name());
-                    switch (k) {
-                        case PERSONAL, OBJECTIVE -> dos.writeUTF(v.getContents());
-                        case ACHIEVEMENT, QUALIFICATIONS -> {
-                            List<String> contentList = ((ListTextSection) v).getList();
-                            dos.writeInt(contentList.size());
-                            contentList.forEach(content -> {
-                                try {
-                                    dos.writeUTF(content);
-                                } catch (IOException e) {
-                                    throw new StorageException(null, "DataStream error write file-resume", e);
-                                }
-                            });
-                        }
-                        case EDUCATION, EXPERIENCE -> {
-                            List<Organization> organizationList = ((ListOrganizationSection) v).getList();
-                            dos.writeInt(organizationList.size());
-                            organizationList.forEach(org -> {
-                                try {
-                                    dos.writeUTF(org.getOrganization().getName());
-                                    dos.writeUTF(org.getOrganization().getUrl());
-                                    List<Organization.Period> periods = org.getPeriods();
-                                    dos.writeInt(periods.size());
-                                    periods.forEach(period -> {
-                                        try {
-                                            dos.writeUTF(period.getDateBegin().toString());
-                                            dos.writeUTF(period.getDateEnd().toString());
-                                            dos.writeUTF(period.getContent());
-                                        } catch (IOException e) {
-                                            throw new StorageException(null, "DataStream error write file-resume", e);
-                                        }
-                                    });
-                                } catch (IOException e) {
-                                    throw new StorageException(null, "DataStream error write file-resume", e);
-                                }
-                            });
-                        }
-                    }
-                } catch (IOException e) {
-                    throw new StorageException(null, "DataStream error write file-resume", e);
+            writeCollections(dos, sections.entrySet(), section -> {
+                SectionType sectionType = section.getKey();
+                dos.writeUTF(sectionType.name());
+
+                switch (sectionType) {
+                    case PERSONAL, OBJECTIVE -> dos.writeUTF(section.getValue().getContents());
+                    case ACHIEVEMENT, QUALIFICATIONS -> writeCollections(dos, ((ListTextSection) section.getValue()).getList(), dos::writeUTF);
+                    case EXPERIENCE, EDUCATION -> writeCollections(dos, ((ListOrganizationSection) section.getValue()).getList(), org -> {
+                        Link organization = org.getOrganization();
+                        dos.writeUTF(organization.getName());
+                        dos.writeUTF(organization.getUrl());
+
+                        writeCollections(dos, org.getPeriods(), period -> {
+                            dos.writeUTF(period.getDateBegin().toString());
+                            dos.writeUTF(period.getDateEnd().toString());
+                            dos.writeUTF(period.getContent());
+                        });
+                    });
                 }
             });
+        }
+    }
+
+    @FunctionalInterface
+    private interface Readable {
+        void reader() throws IOException;
+    }
+
+    @FunctionalInterface
+    private interface Writable<T> {
+        void write(T t) throws IOException;
+    }
+
+    private void reader(DataInputStream dis, Readable reader) throws IOException {
+        int size = dis.readInt();
+        for (int i = 0; i < size; i++) {
+            reader.reader();
+        }
+    }
+
+    private <T> void writeCollections(DataOutputStream dos, Collection<T> collection, Writable<T> writable) throws IOException {
+        dos.writeInt(collection.size());
+        for (T elem : collection) {
+            writable.write(elem);
         }
     }
 }

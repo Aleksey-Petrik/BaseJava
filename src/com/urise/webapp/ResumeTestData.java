@@ -7,14 +7,33 @@ import static com.urise.webapp.util.DateUtil._NOW_;
 
 public class ResumeTestData {
 
-    public static Resume createFullResume(String uuid, String fullName) {
+    public enum TypeFillData {
+        ALL_SECTIONS,
+        EXCEPT_STUDY_WORK,
+        PERSONAL_QUALITIES,
+        CONTACTS
+    }
+
+    public static Resume createFullResume(String uuid, String fullName, TypeFillData type) {
         Resume resume = new Resume(uuid, fullName);
-
-        addContacts(resume);
-        addObjectiveAndPersonal(resume);
-        addAchievementAndQualifications(resume);
-        addExperienceAndEducation(resume);
-
+        switch (type) {
+            case ALL_SECTIONS -> {
+                addContacts(resume);
+                addObjectiveAndPersonal(resume);
+                addAchievementAndQualifications(resume);
+                addExperienceAndEducation(resume);
+            }
+            case EXCEPT_STUDY_WORK -> {
+                addContacts(resume);
+                addObjectiveAndPersonal(resume);
+                addAchievementAndQualifications(resume);
+            }
+            case PERSONAL_QUALITIES -> {
+                addContacts(resume);
+                addObjectiveAndPersonal(resume);
+            }
+            case CONTACTS -> addContacts(resume);
+        }
         return resume;
     }
 
@@ -197,7 +216,7 @@ public class ResumeTestData {
 
     public static void main(String[] args) {
 
-        Resume testResume = createFullResume("UUID_1", "Grigory Kislin");
+        Resume testResume = createFullResume("UUID_1", "Grigory Kislin", TypeFillData.ALL_SECTIONS);
 
         System.out.println("\n" + testResume + "\n");
         testResume.getContacts().forEach((k, v) -> System.out.println(k.getTitle() + " " + v));

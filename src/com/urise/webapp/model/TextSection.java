@@ -21,7 +21,6 @@ public class TextSection extends AbstractSection {
         this.content = content;
     }
 
-    @Override
     public List<String> getList() {
         return Collections.singletonList(getContents());
     }
