@@ -13,9 +13,9 @@ public class MainDeadlock {
     private static void thread(AB obj1, AB obj2) {
         new Thread(() -> {
             synchronized (obj1) {
-                System.out.println(obj1.getName());
-                synchronized (obj2){
-                    System.out.println(obj2.getName());
+                System.out.println(Thread.currentThread().getName() + " " + obj1.getName());
+                synchronized (obj2) {
+                    System.out.println(Thread.currentThread().getName() + " " + obj2.getName());
                 }
             }
         }).start();
