@@ -6,19 +6,28 @@ public class MainDeadlock {
         A a = new A();
         B b = new B();
 
-        thread(a, b);
-        thread(b, a);
+        createThread(a, b);
+        createThread(b, a);
     }
 
-    private static void thread(AB obj1, AB obj2) {
+    private static void createThread(AB obj1, AB obj2) {
         new Thread(() -> {
             synchronized (obj1) {
-                System.out.println(Thread.currentThread().getName() + " " + obj1.getName());
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                printName(obj1);
                 synchronized (obj2) {
-                    System.out.println(Thread.currentThread().getName() + " " + obj2.getName());
+                    printName(obj2);
                 }
             }
         }).start();
+    }
+
+    private static void printName(AB obj) {
+        System.out.println(Thread.currentThread().getName() + " " + obj.getName());
     }
 
     interface AB {
