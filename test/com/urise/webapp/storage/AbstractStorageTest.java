@@ -4,6 +4,7 @@ import com.urise.webapp.ResumeTestData;
 import com.urise.webapp.exception.ExistStorageException;
 import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.Resume;
+import com.urise.webapp.util.Config;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,7 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public abstract class AbstractStorageTest {
-    protected static final File STORAGE_DIR = new File("D:/JAVA/BaseJava/basejava/src/com/urise/webapp/storage/data");
+    protected static final File STORAGE_DIR = Config.get().getStorageDir();
     protected Storage storageTest;
 
     protected static final String UUID_1 = "uuid_1";
@@ -21,12 +22,18 @@ public abstract class AbstractStorageTest {
     protected static final String UUID_3 = "uuid_3";
     protected static final String UUID_4 = "uuid_4";
     protected static final String UUID_5 = "uuid_5";
-
-    protected static final Resume RESUME_1 = ResumeTestData.createFullResume(UUID_1, "Julie E. McKay", ResumeTestData.TypeFillData.ALL_SECTIONS);
-    protected static final Resume RESUME_2 = ResumeTestData.createFullResume(UUID_2, "Elaine B. Wise", ResumeTestData.TypeFillData.EXCEPT_STUDY_WORK);
-    protected static final Resume RESUME_3 = ResumeTestData.createFullResume(UUID_3, "Luis J. Clanton", ResumeTestData.TypeFillData.PERSONAL_QUALITIES);
-    protected static final Resume RESUME_4 = ResumeTestData.createFullResume(UUID_4, "James S. Carroll", ResumeTestData.TypeFillData.CONTACTS);
-    protected static final Resume RESUME_5 = ResumeTestData.createFullResume(UUID_5, "Elaine B. Wise", ResumeTestData.TypeFillData.ALL_SECTIONS);
+    /*
+        protected static final Resume RESUME_1 = ResumeTestData.createFullResume(UUID_1, "Julie E. McKay", ResumeTestData.TypeFillData.ALL_SECTIONS);
+        protected static final Resume RESUME_2 = ResumeTestData.createFullResume(UUID_2, "Elaine B. Wise", ResumeTestData.TypeFillData.EXCEPT_STUDY_WORK);
+        protected static final Resume RESUME_3 = ResumeTestData.createFullResume(UUID_3, "Luis J. Clanton", ResumeTestData.TypeFillData.PERSONAL_QUALITIES);
+        protected static final Resume RESUME_4 = ResumeTestData.createFullResume(UUID_4, "James S. Carroll", ResumeTestData.TypeFillData.CONTACTS);
+        protected static final Resume RESUME_5 = ResumeTestData.createFullResume(UUID_5, "Elaine B. Wise", ResumeTestData.TypeFillData.ALL_SECTIONS);
+     */
+    protected static final Resume RESUME_1 = ResumeTestData.createFullResume(UUID_1, "Julie E. McKay", ResumeTestData.TypeFillData.UUID_NAME);
+    protected static final Resume RESUME_2 = ResumeTestData.createFullResume(UUID_2, "Elaine B. Wise", ResumeTestData.TypeFillData.UUID_NAME);
+    protected static final Resume RESUME_3 = ResumeTestData.createFullResume(UUID_3, "Luis J. Clanton", ResumeTestData.TypeFillData.UUID_NAME);
+    protected static final Resume RESUME_4 = ResumeTestData.createFullResume(UUID_4, "James S. Carroll", ResumeTestData.TypeFillData.UUID_NAME);
+    protected static final Resume RESUME_5 = ResumeTestData.createFullResume(UUID_5, "Elaine B. Wise", ResumeTestData.TypeFillData.UUID_NAME);
 
     public AbstractStorageTest(Storage storageTest) {
         this.storageTest = storageTest;
@@ -93,7 +100,7 @@ public abstract class AbstractStorageTest {
 
     @Test(expected = NotExistStorageException.class)
     public void updateNotExist() {
-        storageTest.delete(UUID_4);
+        storageTest.update(RESUME_4);
     }
 
     @Test

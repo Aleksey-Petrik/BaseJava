@@ -8,6 +8,7 @@ import static com.urise.webapp.util.DateUtil._NOW_;
 public class ResumeTestData {
 
     public enum TypeFillData {
+        UUID_NAME,
         ALL_SECTIONS,
         EXCEPT_STUDY_WORK,
         PERSONAL_QUALITIES,
@@ -17,6 +18,7 @@ public class ResumeTestData {
     public static Resume createFullResume(String uuid, String fullName, TypeFillData type) {
         Resume resume = new Resume(uuid, fullName);
         switch (type) {
+            case UUID_NAME->{}
             case ALL_SECTIONS -> {
                 addContacts(resume);
                 addObjectiveAndPersonal(resume);
