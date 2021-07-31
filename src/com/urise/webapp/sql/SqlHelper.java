@@ -1,6 +1,7 @@
 package com.urise.webapp.sql;
 
 import com.urise.webapp.exception.ExistStorageException;
+import com.urise.webapp.exception.StorageException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -22,7 +23,11 @@ public class SqlHelper {
              PreparedStatement ps = connection.prepareStatement(sql)) {
             return executor.executor(ps);
         } catch (SQLException e) {
-            throw new ExistStorageException("Resume exists in DB!");
+            if ("23505".equals(e.getSQLState())) {
+                throw new ExistStorageException("Resume exists in DB!");
+            } else {
+                throw new StorageException(e);
+            }
         }
     }
 }
