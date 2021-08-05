@@ -8,15 +8,26 @@ import java.util.UUID;
 
 public class MainSql {
     public static void main(String[] args) {
-
+/*
         Resume resume1 = new Resume(UUID.randomUUID().toString(), "ALEX1");
         Resume resume2 = new Resume(UUID.randomUUID().toString(), "ALEX2");
         Resume resume3 = new Resume(UUID.randomUUID().toString(), "ALEX3");
         Resume resume4 = new Resume(UUID.randomUUID().toString(), "ALEX4");
+
+ */
         SqlStorage sqlStorage = new SqlStorage(Config.get().getDbUrl(),
                 Config.get().getDbUser(),
                 Config.get().getDbPassword());
 
+        Resume resume2 = sqlStorage.get("2d1e9322-2373-41b8-a8af-dc1b08069e8a");
+        System.out.println(resume2.getFullName());
+        System.out.println(resume2.getContacts().toString());
+
+        Resume resume = sqlStorage.get("252dfe75-ee71-41a0-b430-a876eeacfe6f");
+        System.out.println(resume.getFullName());
+        System.out.println(resume.getContacts().toString());
+
+/*
         sqlStorage.clear();
         sqlStorage.save(resume1);
         sqlStorage.save(resume2);
@@ -24,5 +35,6 @@ public class MainSql {
         sqlStorage.save(resume3);
         sqlStorage.save(resume4);
         System.out.println(sqlStorage.size());
+ */
     }
 }

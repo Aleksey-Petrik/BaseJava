@@ -30,4 +30,25 @@ public class SqlHelper {
             }
         }
     }
+
+    public <T> T transactionExecute(SqlTransaction<T> execute) {
+        try (Connection connection = connectionFactory.getConnection()) {
+            try {
+                connection.setAutoCommit(false);
+                T res = execute.execute(connection);
+                connection.commit();
+                return res;
+            } catch (SQLException e) {
+                if ("23505".equals(e.getSQLState())) {
+                    connection.rollback();
+                    throw new ExistStorageException("Resume exists in DB!");
+                } else {
+                    throw new StorageException(e);
+                }
+            }
+        } catch (SQLException e) {
+            throw new StorageException(e);
+        }
+    }
+
 }
