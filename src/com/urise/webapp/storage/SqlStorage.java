@@ -24,23 +24,25 @@ public class SqlStorage implements Storage {
 
     @Override
     public void save(Resume resume) {
-        sqlHelper.sqlExecute("INSERT INTO resume (uuid, full_name) VALUES (?, ?)", ps -> {
-            ps.setString(1, resume.getUuid());
-            ps.setString(2, resume.getFullName());
-            ps.execute();
+        sqlHelper.transactionExecute(connection -> {
+            try (PreparedStatement ps = connection.prepareStatement("INSERT INTO resume (uuid, full_name) VALUES (?, ?)")) {
+                ps.setString(1, resume.getUuid());
+                ps.setString(2, resume.getFullName());
+                ps.execute();
+            }
+            try (PreparedStatement ps = connection.prepareStatement(""
+                    + "INSERT INTO contact (type, value, resume_uuid)"
+                    + "     VALUES (?, ?, ?)")) {
+                for (Map.Entry<ContactsType, String> contact : resume.getContacts().entrySet()) {
+                    ps.setString(1, contact.getKey().name());
+                    ps.setString(2, contact.getValue());
+                    ps.setString(3, resume.getUuid());
+                    ps.addBatch();//Добавление операций на исполнение
+                }
+                ps.executeBatch();//Выполнение всех накопленных команд
+            }
             return null;
         });
-        for (Map.Entry<ContactsType, String> contact : resume.getContacts().entrySet()) {
-            sqlHelper.sqlExecute(""
-                    + "INSERT INTO contact (type, value, resume_uuid)"
-                    + "     VALUES (?, ?, ?)", ps -> {
-                ps.setString(1, contact.getKey().name());
-                ps.setString(2, contact.getValue());
-                ps.setString(3, resume.getUuid());
-                ps.execute();
-                return null;
-            });
-        }
     }
 
     @Override
@@ -95,11 +97,31 @@ public class SqlStorage implements Storage {
 
     @Override
     public List<Resume> getAllSorted() {
-        return sqlHelper.sqlExecute("SELECT * FROM resume ORDER BY full_name, uuid", ps -> {
+        return sqlHelper.sqlExecute(""
+                + "   SELECT * "
+                + "     FROM resume r "
+                + "LEFT JOIN contact c ON r.uuid = c.resume_uuid "
+                + " ORDER BY r.full_name, r.uuid", ps -> {
             List<Resume> resumes = new ArrayList<>();
             ResultSet rs = ps.executeQuery();
+            Resume resume = null;
+            String uuid = "null";
             while (rs.next()) {
-                resumes.add(new Resume(rs.getString("uuid"), rs.getString("full_name")));
+                String fullNameDB = rs.getString("full_name");
+                String uuidDB = rs.getString("uuid");
+                if (!rs.wasNull()) {
+                    if (!uuid.equals(uuidDB)) {
+                        resume = new Resume(uuidDB, fullNameDB);
+                        resumes.add(resume);
+                        uuid = uuidDB;
+                    }
+                    String type = rs.getString("type");
+                    String value = rs.getString("value");
+                    if (!rs.wasNull()) {
+                        ContactsType contactsType = ContactsType.valueOf(type);
+                        resume.addContact(contactsType, value);
+                    }
+                }
             }
             return resumes;
         });

@@ -4,6 +4,7 @@ import com.urise.webapp.model.Resume;
 import com.urise.webapp.storage.SqlStorage;
 import com.urise.webapp.util.Config;
 
+import java.util.List;
 import java.util.UUID;
 
 public class MainSql {
@@ -18,6 +19,12 @@ public class MainSql {
         SqlStorage sqlStorage = new SqlStorage(Config.get().getDbUrl(),
                 Config.get().getDbUser(),
                 Config.get().getDbPassword());
+
+        List<Resume> resumes = sqlStorage.getAllSorted();
+        System.out.println(resumes.toString());
+
+        //Resume resume3 = ResumeTestData.createFullResume(UUID.randomUUID().toString(), "Julie E. McKay", ResumeTestData.TypeFillData.CONTACTS);
+        //sqlStorage.save(resume3);
 
         Resume resume2 = sqlStorage.get("2d1e9322-2373-41b8-a8af-dc1b08069e8a");
         System.out.println(resume2.getFullName());
