@@ -20,8 +20,14 @@ public class MainSql {
                 Config.get().getDbUser(),
                 Config.get().getDbPassword());
 
+
+        Resume resume4 = ResumeTestData.createFullResume("2d1e9322-2373-41b8-a8af-dc1b08069e8a", "Julie E. McKay 666", ResumeTestData.TypeFillData.CONTACTS);
+        sqlStorage.update(resume4);
+
         List<Resume> resumes = sqlStorage.getAllSorted();
         System.out.println(resumes.toString());
+
+        //sqlStorage.delete("250484dc-a7c2-4ac4-a9f0-bf2a42b77d24");
 
         //Resume resume3 = ResumeTestData.createFullResume(UUID.randomUUID().toString(), "Julie E. McKay", ResumeTestData.TypeFillData.CONTACTS);
         //sqlStorage.save(resume3);
