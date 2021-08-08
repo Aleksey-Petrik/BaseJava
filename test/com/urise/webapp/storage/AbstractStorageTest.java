@@ -30,11 +30,11 @@ public abstract class AbstractStorageTest {
         protected static final Resume RESUME_4 = ResumeTestData.createFullResume(UUID_4, "James S. Carroll", ResumeTestData.TypeFillData.CONTACTS);
         protected static final Resume RESUME_5 = ResumeTestData.createFullResume(UUID_5, "Elaine B. Wise", ResumeTestData.TypeFillData.ALL_SECTIONS);
      */
-    protected static final Resume RESUME_1 = ResumeTestData.createFullResume(UUID_1, "Julie E. McKay", ResumeTestData.TypeFillData.UUID_NAME);
+    protected static final Resume RESUME_1 = ResumeTestData.createFullResume(UUID_1, "Julie E. McKay", ResumeTestData.TypeFillData.CONTACTS);
     protected static final Resume RESUME_2 = ResumeTestData.createFullResume(UUID_2, "Elaine B. Wise", ResumeTestData.TypeFillData.UUID_NAME);
-    protected static final Resume RESUME_3 = ResumeTestData.createFullResume(UUID_3, "Luis J. Clanton", ResumeTestData.TypeFillData.UUID_NAME);
+    protected static final Resume RESUME_3 = ResumeTestData.createFullResume(UUID_3, "Luis J. Clanton", ResumeTestData.TypeFillData.CONTACTS);
     protected static final Resume RESUME_4 = ResumeTestData.createFullResume(UUID_4, "James S. Carroll", ResumeTestData.TypeFillData.UUID_NAME);
-    protected static final Resume RESUME_5 = ResumeTestData.createFullResume(UUID_5, "Elaine B. Wise", ResumeTestData.TypeFillData.UUID_NAME);
+    protected static final Resume RESUME_5 = ResumeTestData.createFullResume(UUID_5, "Elaine B. Wise", ResumeTestData.TypeFillData.CONTACTS);
 
     public AbstractStorageTest(Storage storageTest) {
         this.storageTest = storageTest;

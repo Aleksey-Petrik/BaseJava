@@ -42,12 +42,12 @@ public class SqlStorage implements Storage {
                 ps.setString(1, resume.getFullName());
                 ps.setString(2, resume.getUuid());
                 if (ps.executeUpdate() == 0) {
-                    throw new NotExistStorageException("");
+                    throw new NotExistStorageException(resume.getUuid() + " the resume does not exist!");
                 }
                 //Чтобы каждый контакт не обновлять, просто удалим все, а после вернем старые/новые
                 try (PreparedStatement psDelete = connection.prepareStatement("DELETE FROM contact WHERE resume_uuid = ?")) {
                     psDelete.setString(1, resume.getUuid());
-                    ps.execute();
+                    psDelete.execute();
                 }
                 insertContacts(resume, connection);
             }
