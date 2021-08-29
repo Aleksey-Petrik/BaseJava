@@ -11,11 +11,13 @@ public class MainFile {
         File[] fileList = Objects.requireNonNull(file.listFiles());
         for (File fl : fileList) {
             if (fl.isDirectory()) {
-                System.out.println("DIR  - " + "....".repeat(offset) + fl.getName());
+                //System.out.println("DIR  - " + "....".repeat(offset) + fl.getName());
+                System.out.println("DIR  - " + "...." + fl.getName());
                 walkFiles(fl, ++offset);
                 --offset;
             } else {
-                System.out.println("FILE - " + "....".repeat(offset) + fl.getName());
+                //System.out.println("FILE - " + "....".repeat(offset) + fl.getName());
+                System.out.println("FILE - " + "...." + fl.getName());
             }
         }
     }

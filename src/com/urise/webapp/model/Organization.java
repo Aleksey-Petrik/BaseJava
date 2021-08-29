@@ -6,7 +6,6 @@ import com.urise.webapp.util.LocalDateAdapter;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -17,7 +16,6 @@ import static com.urise.webapp.util.DateUtil.MASK_FOR_PRINT_PERIOD;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Organization implements Serializable {
-    @Serial
     private static final long serialVersionUID = 1L;
 
     private Link link;

@@ -22,13 +22,18 @@ public class DataStreamStorageSerializer implements StreamSerialize {
                 SectionType sectionType = SectionType.valueOf(dis.readUTF());
                 AbstractSection sectionObject = null;
                 switch (sectionType) {
-                    case PERSONAL, OBJECTIVE -> sectionObject = new TextSection(dis.readUTF());
-                    case ACHIEVEMENT, QUALIFICATIONS -> {
+                    case PERSONAL:
+                    case OBJECTIVE:
+                        sectionObject = new TextSection(dis.readUTF());
+                        break;
+                    case ACHIEVEMENT:
+                    case QUALIFICATIONS:
                         ListTextSection listTextSection = new ListTextSection();
                         reader(dis, () -> listTextSection.addContent(dis.readUTF()));
                         sectionObject = listTextSection;
-                    }
-                    case EXPERIENCE, EDUCATION -> {
+                        break;
+                    case EXPERIENCE:
+                    case EDUCATION: {
                         ListOrganizationSection organizations = new ListOrganizationSection();
                         reader(dis, () -> {
                             Organization organization = new Organization(new Link(dis.readUTF(), dis.readUTF()));
@@ -64,19 +69,27 @@ public class DataStreamStorageSerializer implements StreamSerialize {
                 dos.writeUTF(sectionType.name());
 
                 switch (sectionType) {
-                    case PERSONAL, OBJECTIVE -> dos.writeUTF(section.getValue().getContents());
-                    case ACHIEVEMENT, QUALIFICATIONS -> writeCollections(dos, ((ListTextSection) section.getValue()).getList(), dos::writeUTF);
-                    case EXPERIENCE, EDUCATION -> writeCollections(dos, ((ListOrganizationSection) section.getValue()).getList(), org -> {
-                        Link organization = org.getOrganization();
-                        dos.writeUTF(organization.getName());
-                        dos.writeUTF(organization.getUrl());
+                    case PERSONAL:
+                    case OBJECTIVE:
+                        dos.writeUTF(section.getValue().getContents());
+                        break;
+                    case ACHIEVEMENT:
+                    case QUALIFICATIONS:
+                        writeCollections(dos, ((ListTextSection) section.getValue()).getList(), dos::writeUTF);
+                        break;
+                    case EXPERIENCE:
+                    case EDUCATION:
+                        writeCollections(dos, ((ListOrganizationSection) section.getValue()).getList(), org -> {
+                            Link organization = org.getOrganization();
+                            dos.writeUTF(organization.getName());
+                            dos.writeUTF(organization.getUrl());
 
-                        writeCollections(dos, org.getPeriods(), period -> {
-                            dos.writeUTF(period.getDateBegin().toString());
-                            dos.writeUTF(period.getDateEnd().toString());
-                            dos.writeUTF(period.getContent());
+                            writeCollections(dos, org.getPeriods(), period -> {
+                                dos.writeUTF(period.getDateBegin().toString());
+                                dos.writeUTF(period.getDateEnd().toString());
+                                dos.writeUTF(period.getContent());
+                            });
                         });
-                    });
                 }
             });
         }

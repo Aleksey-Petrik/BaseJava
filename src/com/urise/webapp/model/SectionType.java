@@ -14,12 +14,22 @@ public enum SectionType {
         this.title = title;
     }
 
-    public static String getType(SectionType type){
-        return switch (type) {
-            case PERSONAL, OBJECTIVE -> "TEXT";
-            case ACHIEVEMENT, QUALIFICATIONS -> "LIST";
-            case EXPERIENCE, EDUCATION -> "MULTI";
-        };
+    public static String getType(SectionType type) {
+        String typeSections = "";
+        switch (type) {
+            case PERSONAL:
+            case OBJECTIVE:
+                typeSections = "TEXT";
+                break;
+            case ACHIEVEMENT:
+            case QUALIFICATIONS:
+                typeSections = "LIST";
+                break;
+            case EXPERIENCE:
+            case EDUCATION:
+                typeSections = "MULTI";
+        }
+        return typeSections;
     }
 
     public String getTitle() {

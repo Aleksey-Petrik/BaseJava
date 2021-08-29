@@ -18,23 +18,23 @@ public class ResumeTestData {
     public static Resume createFullResume(String uuid, String fullName, TypeFillData type) {
         Resume resume = new Resume(uuid, fullName);
         switch (type) {
-            case UUID_NAME->{}
-            case ALL_SECTIONS -> {
+            case UUID_NAME:
+            case ALL_SECTIONS:
                 addContacts(resume);
                 addObjectiveAndPersonal(resume);
                 addAchievementAndQualifications(resume);
                 addExperienceAndEducation(resume);
-            }
-            case EXCEPT_STUDY_WORK -> {
+                break;
+            case EXCEPT_STUDY_WORK:
                 addContacts(resume);
                 addObjectiveAndPersonal(resume);
                 addAchievementAndQualifications(resume);
-            }
-            case PERSONAL_QUALITIES -> {
+                break;
+            case PERSONAL_QUALITIES:
                 addContacts(resume);
                 addObjectiveAndPersonal(resume);
-            }
-            case CONTACTS -> addContacts(resume);
+            break;
+            case CONTACTS: addContacts(resume);
         }
         return resume;
     }
