@@ -10,7 +10,7 @@ import java.util.Objects;
 public class ListTextSection extends AbstractSection {
     private static final long serialVersionUID = 1L;
 
-    private List<String> contents = new ArrayList<>();
+    private final List<String> contents = new ArrayList<>();
 
     public ListTextSection() {
     }
@@ -26,7 +26,7 @@ public class ListTextSection extends AbstractSection {
     @Override
     public String getContents() {
         StringBuilder sb = new StringBuilder();
-        contents.forEach(sb::append);
+        contents.forEach(content -> sb.append(content).append("\n"));
         return sb.toString();
     }
 

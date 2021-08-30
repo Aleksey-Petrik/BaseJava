@@ -19,6 +19,7 @@ public class ResumeTestData {
         Resume resume = new Resume(uuid, fullName);
         switch (type) {
             case UUID_NAME:
+                break;
             case ALL_SECTIONS:
                 addContacts(resume);
                 addObjectiveAndPersonal(resume);
@@ -33,8 +34,9 @@ public class ResumeTestData {
             case PERSONAL_QUALITIES:
                 addContacts(resume);
                 addObjectiveAndPersonal(resume);
-            break;
-            case CONTACTS: addContacts(resume);
+                break;
+            case CONTACTS:
+                addContacts(resume);
         }
         return resume;
     }

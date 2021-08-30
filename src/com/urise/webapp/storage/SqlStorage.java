@@ -1,8 +1,7 @@
 package com.urise.webapp.storage;
 
 import com.urise.webapp.exception.NotExistStorageException;
-import com.urise.webapp.model.ContactsType;
-import com.urise.webapp.model.Resume;
+import com.urise.webapp.model.*;
 import com.urise.webapp.sql.SqlHelper;
 
 import java.sql.*;
@@ -31,6 +30,7 @@ public class SqlStorage implements Storage {
                 ps.execute();
             }
             insertContacts(resume, connection);
+            insertSections(resume, connection);
             return null;
         });
     }
@@ -44,12 +44,11 @@ public class SqlStorage implements Storage {
                 if (ps.executeUpdate() == 0) {
                     throw new NotExistStorageException(resume.getUuid() + " the resume does not exist!");
                 }
-                //Чтобы каждый контакт не обновлять, просто удалим все, а после вернем старые/новые
-                try (PreparedStatement psDelete = connection.prepareStatement("DELETE FROM contact WHERE resume_uuid = ?")) {
-                    psDelete.setString(1, resume.getUuid());
-                    psDelete.execute();
-                }
+                //Чтобы каждый контакт не обновлять, просто удалим все, а после вернем старые/новые значения в секции
+                deleteContents(connection, resume, "contact");
                 insertContacts(resume, connection);
+                deleteContents(connection, resume, "section");
+                insertSections(resume, connection);
             }
             return null;
         });
@@ -57,22 +56,35 @@ public class SqlStorage implements Storage {
 
     @Override
     public Resume get(String uuid) {
-        return sqlHelper.sqlExecute(""
-                + "    SELECT * "
-                + "      FROM resume r"
-                + " LEFT JOIN contact c"
-                + "        ON r.uuid = c.resume_uuid"
-                + "     WHERE r.uuid = ?", ps -> {
-            ps.setString(1, uuid);
-            ResultSet rs = ps.executeQuery();
-            if (!rs.next()) {
-                throw new NotExistStorageException("");
+
+        return sqlHelper.transactionExecute(connection -> {
+            Resume resume;
+            try (PreparedStatement ps = connection.prepareStatement("SELECT * FROM resume WHERE uuid = ?")) {
+                ps.setString(1, uuid);
+                ResultSet rs = ps.executeQuery();
+                if (!rs.next()) {
+                    throw new NotExistStorageException(uuid + " the resume does not exist!");
+                }
+                resume = new Resume(rs.getString("uuid"),
+                        rs.getString("full_name"));
             }
-            Resume resume = new Resume(rs.getString("uuid"),
-                    rs.getString("full_name"));
-            do {
-                addContact(resume, rs);
-            } while (rs.next());
+
+            try (PreparedStatement ps = connection.prepareStatement("SELECT * FROM contact WHERE resume_uuid = ?")) {
+                ps.setString(1, uuid);
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    addContact(resume, rs);
+                }
+            }
+
+            try (PreparedStatement ps = connection.prepareStatement("SELECT * FROM section WHERE resume_uuid = ?")) {
+                ps.setString(1, uuid);
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    addSection(resume, rs);
+                }
+            }
+
             return resume;
         });
     }
@@ -132,6 +144,29 @@ public class SqlStorage implements Storage {
         }
     }
 
+    private void addSection(Resume resume, ResultSet rs) throws SQLException {
+        String value = rs.getString("value");
+        String type = rs.getString("type");
+        if (!rs.wasNull()) { //если смогли считать, значит есть ветка контактов
+            AbstractSection abstractSection = null;
+            SectionType sectionType = SectionType.valueOf(type);
+            switch (sectionType) {
+                case PERSONAL:
+                case OBJECTIVE:
+                    abstractSection = new TextSection(value);
+                    break;
+                case ACHIEVEMENT:
+                case QUALIFICATIONS:
+                    abstractSection = new ListTextSection();
+                    String[] contents = value.split("\n");
+                    for (String content : contents) {
+                        ((ListTextSection) abstractSection).addContent(content);
+                    }
+            }
+            resume.addSection(sectionType, abstractSection);
+        }
+    }
+
     private void insertContacts(Resume resume, Connection connection) throws SQLException {
         try (PreparedStatement ps = connection.prepareStatement(""
                 + "INSERT INTO contact (type, value, resume_uuid)"
@@ -143,6 +178,28 @@ public class SqlStorage implements Storage {
                 ps.addBatch();//Добавление операции на исполнение
             }
             ps.executeBatch();//Выполнение всех накопленных команд
+        }
+    }
+
+    private void insertSections(Resume resume, Connection connection) throws SQLException {
+        try (PreparedStatement ps = connection.prepareStatement(""
+                + "INSERT INTO section (type, value, resume_uuid)"
+                + "VALUES (?, ?, ?)")) {
+            for (Map.Entry<SectionType, AbstractSection> section : resume.getSections().entrySet()) {
+                SectionType type = section.getKey();
+                ps.setString(1, type.name());
+                ps.setString(2, section.getValue().getContents());
+                ps.setString(3, resume.getUuid());
+                ps.addBatch();//Добавление операции на исполнение
+            }
+            ps.executeBatch();
+        }
+    }
+
+    private void deleteContents(Connection connection, Resume resume, String table) throws SQLException {
+        try (PreparedStatement psDelete = connection.prepareStatement("DELETE FROM " + table + " WHERE resume_uuid = ?")) {
+            psDelete.setString(1, resume.getUuid());
+            psDelete.execute();
         }
     }
 }
