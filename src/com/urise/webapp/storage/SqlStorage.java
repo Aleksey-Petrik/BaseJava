@@ -6,6 +6,7 @@ import com.urise.webapp.sql.SqlHelper;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +14,12 @@ public class SqlStorage implements Storage {
     public final SqlHelper sqlHelper;
 
     public SqlStorage(String dbUrl, String dbUser, String dbPassword) {
+        //Инициализация драйвера Базы Данных
+        try {
+            Class.forName("org.postgresql.Driver");
+        } catch (ClassNotFoundException e) {
+            throw new IllegalStateException("No driver found for PostgreSQL database", e);
+        }
         sqlHelper = new SqlHelper(() -> DriverManager.getConnection(dbUrl, dbUser, dbPassword));
     }
 
@@ -102,28 +109,33 @@ public class SqlStorage implements Storage {
 
     @Override
     public List<Resume> getAllSorted() {
-        return sqlHelper.sqlExecute(""
-                + "   SELECT * "
-                + "     FROM resume r "
-                + "LEFT JOIN contact c ON r.uuid = c.resume_uuid "
-                + " ORDER BY r.full_name, r.uuid", ps -> {
-            ResultSet rs = ps.executeQuery();
-            List<Resume> resumes = new ArrayList<>();
-            Resume resume = null;
-            String uuid = "null";
-            while (rs.next()) {
-                String fullNameDB = rs.getString("full_name");
-                String uuidDB = rs.getString("uuid");
-                if (!rs.wasNull()) {
-                    if (!uuid.equals(uuidDB)) {//Если uuid равен ранее добавленному, значит добавляем для него контакты
-                        resume = new Resume(uuidDB, fullNameDB);
-                        resumes.add(resume);
-                        uuid = uuidDB;
-                    }
-                    addContact(resume, rs);
+
+        return sqlHelper.transactionExecute(connection -> {
+            Map<String, Resume> resumes = new LinkedHashMap<>();
+            try (PreparedStatement ps = connection.prepareStatement("SELECT * FROM resume ORDER BY full_name, uuid")) {
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    String fullName = rs.getString("full_name");
+                    String uuid = rs.getString("uuid");
+                    resumes.put(uuid, new Resume(uuid, fullName));
                 }
             }
-            return resumes;
+
+            try (PreparedStatement ps = connection.prepareStatement("SELECT * FROM contact")) {
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    addContact(resumes.get(rs.getString("resume_uuid")), rs);
+                }
+            }
+
+            try (PreparedStatement ps = connection.prepareStatement("SELECT * FROM section")) {
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    addSection(resumes.get(rs.getString("resume_uuid")), rs);
+                }
+            }
+
+            return new ArrayList<>(resumes.values());
         });
     }
 
@@ -147,7 +159,7 @@ public class SqlStorage implements Storage {
     private void addSection(Resume resume, ResultSet rs) throws SQLException {
         String value = rs.getString("value");
         String type = rs.getString("type");
-        if (!rs.wasNull()) { //если смогли считать, значит есть ветка контактов
+        if (!rs.wasNull()) { //если смогли считать, значит есть ветка секций
             AbstractSection abstractSection = null;
             SectionType sectionType = SectionType.valueOf(type);
             switch (sectionType) {
