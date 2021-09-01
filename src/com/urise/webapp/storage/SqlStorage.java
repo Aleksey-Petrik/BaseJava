@@ -3,6 +3,7 @@ package com.urise.webapp.storage;
 import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.*;
 import com.urise.webapp.sql.SqlHelper;
+import com.urise.webapp.util.JsonParser;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -157,25 +158,11 @@ public class SqlStorage implements Storage {
     }
 
     private void addSection(Resume resume, ResultSet rs) throws SQLException {
-        String value = rs.getString("value");
-        String type = rs.getString("type");
-        if (!rs.wasNull()) { //если смогли считать, значит есть ветка секций
-            AbstractSection abstractSection = null;
-            SectionType sectionType = SectionType.valueOf(type);
-            switch (sectionType) {
-                case PERSONAL:
-                case OBJECTIVE:
-                    abstractSection = new TextSection(value);
-                    break;
-                case ACHIEVEMENT:
-                case QUALIFICATIONS:
-                    abstractSection = new ListTextSection();
-                    String[] contents = value.split("\n");
-                    for (String content : contents) {
-                        ((ListTextSection) abstractSection).addContent(content);
-                    }
-            }
-            resume.addSection(sectionType, abstractSection);
+        String content = rs.getString("value");
+        if (!rs.wasNull()) {
+            SectionType type = SectionType.valueOf(rs.getString("type"));
+            //десериализация из формата Json в секцию
+            resume.addSection(type, JsonParser.read(content, AbstractSection.class));
         }
     }
 
@@ -197,10 +184,11 @@ public class SqlStorage implements Storage {
         try (PreparedStatement ps = connection.prepareStatement(""
                 + "INSERT INTO section (type, value, resume_uuid)"
                 + "VALUES (?, ?, ?)")) {
-            for (Map.Entry<SectionType, AbstractSection> section : resume.getSections().entrySet()) {
-                SectionType type = section.getKey();
+            for (Map.Entry<SectionType, AbstractSection> elementSection : resume.getSections().entrySet()) {
+                SectionType type = elementSection.getKey();
                 ps.setString(1, type.name());
-                ps.setString(2, section.getValue().getContents());
+                //сериализация всей секции в формат Json
+                ps.setString(2, JsonParser.write(elementSection.getValue(), AbstractSection.class));
                 ps.setString(3, resume.getUuid());
                 ps.addBatch();//Добавление операции на исполнение
             }
