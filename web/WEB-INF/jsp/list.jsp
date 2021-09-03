@@ -21,11 +21,18 @@
         <c:forEach items="${resumes}" var="resume">
             <jsp:useBean id="resume" type="com.urise.webapp.model.Resume"/>
             <tr>
-                <td><a href="resume?uuid=${resume.uuid}">${resume.fullName}</a></td>
-                <td>${resume.getContact(ContactsType.EMAIL)}</td>
+                <td><a href="resume?uuid=${resume.uuid}&action=view">${resume.fullName}</a></td>
+                <td>
+                    <%=ContactsType.EMAIL.toHtml(resume.getContact(ContactsType.EMAIL))%>
+                </td>
+                <td><a href="resume?uuid=${resume.uuid}&action=delete">Delete</a></td>
+                <td><a href="resume?uuid=${resume.uuid}&action=edit">Edit</a></td>
             </tr>
         </c:forEach>
     </table>
+    <form>
+        <p><input type="submit"></p>
+    </form>
 </section>
 <jsp:include page="fragments/footer.jsp"/>
 </body>

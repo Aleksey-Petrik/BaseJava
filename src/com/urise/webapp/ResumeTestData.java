@@ -88,10 +88,8 @@ public class ResumeTestData {
 
         sectionQualifications.addContent("JEE AS: GlassFish (v2.1, v3), OC4J, JBoss, Tomcat, Jetty, WebLogic, WSO2");
         sectionQualifications.addContent("Version control: Subversion, Git, Mercury, ClearCase, Perforce");
-        sectionQualifications.addContent("DB: PostgreSQL(наследование, pgplsql, PL/Python), Redis (Jedis), H2, Oracle,");
-        sectionQualifications.addContent("MySQL, SQLite, MS SQL, HSQLDB");
-        sectionQualifications.addContent("Languages: Java, Scala, Python/Jython/PL-Python, JavaScript, Groovy,");
-        sectionQualifications.addContent("XML/XSD/XSLT, SQL, C/C++, Unix shell scripts,");
+        sectionQualifications.addContent("DB: PostgreSQL(наследование, pgplsql, PL/Python), Redis (Jedis), H2, Oracle, MySQL, SQLite, MS SQL, HSQLDB");
+        sectionQualifications.addContent("Languages: Java, Scala, Python/Jython/PL-Python, JavaScript, Groovy, XML/XSD/XSLT, SQL, C/C++, Unix shell scripts");
         sectionQualifications.addContent(
                 "Java Frameworks: Java 8 (Time API, Streams), Guava, Java Executor, MyBatis, " +
                         "Spring (MVC, Security, Data, Clouds, Boot), JPA (Hibernate, EclipseLink), Guice, " +
