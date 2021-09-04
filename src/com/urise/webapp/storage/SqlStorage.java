@@ -185,12 +185,14 @@ public class SqlStorage implements Storage {
                 + "INSERT INTO section (type, value, resume_uuid)"
                 + "VALUES (?, ?, ?)")) {
             for (Map.Entry<SectionType, AbstractSection> elementSection : resume.getSections().entrySet()) {
-                SectionType type = elementSection.getKey();
-                ps.setString(1, type.name());
-                //сериализация всей секции в формат Json
-                ps.setString(2, JsonParser.write(elementSection.getValue(), AbstractSection.class));
-                ps.setString(3, resume.getUuid());
-                ps.addBatch();//Добавление операции на исполнение
+                if (!elementSection.getValue().getContents().isEmpty()) {
+                    SectionType type = elementSection.getKey();
+                    ps.setString(1, type.name());
+                    //сериализация всей секции в формат Json
+                    ps.setString(2, JsonParser.write(elementSection.getValue(), AbstractSection.class));
+                    ps.setString(3, resume.getUuid());
+                    ps.addBatch();//Добавление операции на исполнение
+                }
             }
             ps.executeBatch();
         }

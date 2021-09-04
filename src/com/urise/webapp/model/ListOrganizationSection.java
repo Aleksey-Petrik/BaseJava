@@ -46,8 +46,25 @@ public class ListOrganizationSection extends AbstractSection {
 
     @Override
     public String getHtmlContents() {
-        //TODO чуть позже
-        return "HTML";
+        StringBuilder sb = new StringBuilder("<ul>");
+        for (Organization org : organizations) {
+            sb.append("<li>")
+                    .append("<a href=" + org.getOrganization().getUrl() + "><h4>" + org.getOrganization().getName() + "</h4></a>");
+
+            sb.append("<ul>");
+            org.getPeriods().forEach(period -> sb
+                    .append("<li>")
+                    .append("<b>" + DateUtil.format(period.getDateBegin(), MASK_FOR_PRINT_PERIOD))
+                    .append("-")
+                    .append(DateUtil.format(period.getDateEnd(), MASK_FOR_PRINT_PERIOD) + "</b>")
+                    .append("  ")
+                    .append(period.getContent())
+                    .append("</li>"));
+            sb.append("</ul>")
+                    .append("</li>");
+        }
+        sb.append("</ul>");
+        return sb.toString();
     }
 
     @Override

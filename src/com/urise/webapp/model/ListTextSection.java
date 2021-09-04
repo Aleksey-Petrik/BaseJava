@@ -32,8 +32,12 @@ public class ListTextSection extends AbstractSection {
 
     @Override
     public String getHtmlContents() {
-        StringBuilder sb = new StringBuilder();
-        contents.forEach(content -> sb.append(content).append("<br>"));
+        StringBuilder sb = new StringBuilder("<ul>");
+        contents.forEach(content -> sb
+                .append("<li>")
+                .append(content)
+                .append("</li>"));
+        sb.append("</ul>");
         return sb.toString();
     }
 
