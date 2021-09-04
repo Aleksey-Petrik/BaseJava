@@ -46,7 +46,7 @@
         <p><textarea name="${SectionType.QUALIFICATIONS.name()}" rows=10 cols=100 name="text">${resume.getSection(SectionType.QUALIFICATIONS).contents}</textarea></p>
         <hr>
         <button type="submit">Сохранить</button>
-        <button onclick="window.history.back()">Отменить</button>
+        <button type="reset" onclick="window.history.back()">Отменить</button>
     </form>
     <br>
 </section>
