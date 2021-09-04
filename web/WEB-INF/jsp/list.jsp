@@ -12,11 +12,11 @@
 <body>
 <jsp:include page="fragments/header.jsp"/>
 <section>
-    <table border=1>
-        <caption>Резюме:</caption>
+    <table class="table">
+        <caption><h2>База резюме:</h2></caption>
         <tr>
-            <td>UUID</td>
-            <td>Full Name</td>
+            <td><b>Full name</b></td>
+            <td><b>Email</b></td>
         </tr>
         <c:forEach items="${resumes}" var="resume">
             <jsp:useBean id="resume" type="com.urise.webapp.model.Resume"/>
@@ -25,14 +25,13 @@
                 <td>
                     <%=ContactsType.EMAIL.toHtml(resume.getContact(ContactsType.EMAIL))%>
                 </td>
-                <td><a href="resume?uuid=${resume.uuid}&action=delete">Delete</a></td>
-                <td><a href="resume?uuid=${resume.uuid}&action=edit">Edit</a></td>
+                <td><a href="resume?uuid=${resume.uuid}&action=delete"><img src="img/delete.png"></a></td>
+                <td><a href="resume?uuid=${resume.uuid}&action=edit"><img src="img/pencil.png"></a></td>
             </tr>
         </c:forEach>
     </table>
-    <form>
-        <p><input type="submit"></p>
-    </form>
+    <br>
+    <a href="resume?uuid=${resume.uuid}&action=add"><img src="img/add-user.png"></a>
 </section>
 <jsp:include page="fragments/footer.jsp"/>
 </body>

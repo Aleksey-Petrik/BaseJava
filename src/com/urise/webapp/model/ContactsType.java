@@ -1,7 +1,12 @@
 package com.urise.webapp.model;
 
 public enum ContactsType {
-    TEL_NUMBER("Номер телефона:"),
+    TEL_NUMBER("Номер телефона:") {
+        @Override
+        public String toHtml0(String value) {
+            return "<a href='telephone:" + value + "'>" + value + "</a>";
+        }
+    },
     SKYPE("Skype:") {
         @Override
         public String toHtml0(String value) {
@@ -14,10 +19,30 @@ public enum ContactsType {
             return "<a href='mailto:" + value + "'>" + value + "</a>";
         }
     },
-    LINKED_IN("Профиль LinkedIn:"),
-    GITHUB("Профиль GitHub:"),
-    STACKOVERFLOW("Профиль Stackoverflow:"),
-    HOME_SITE("Домашняя страница:");
+    LINKED_IN("Профиль LinkedIn:") {
+        @Override
+        public String toHtml0(String value) {
+            return "<a href='https://www.linkedin.com" + value + "'>" + value + "</a>";
+        }
+    },
+    GITHUB("Профиль GitHub:") {
+        @Override
+        public String toHtml0(String value) {
+            return "<a href='github." + value + "'>" + value + "</a>";
+        }
+    },
+    STACKOVERFLOW("Профиль Stackoverflow:") {
+        @Override
+        public String toHtml0(String value) {
+            return "<a href='https://stackoverflow.com" + value + "'>" + value + "</a>";
+        }
+    },
+    HOME_SITE("Домашняя страница:") {
+        @Override
+        public String toHtml0(String value) {
+            return "<a href='http://gkislin.ru/" + value + "'>" + value + "</a>";
+        }
+    };
 
     private String title;
 

@@ -18,31 +18,31 @@
     <form method="post" action="resume" enctype="application/x-www-form-urlencoded">
         <input type="hidden" name="uuid" value="${resume.uuid}">
         <dl>
-            <dt>Имя:</dt>
+            <dt><b>Имя:</b></dt>
             <dd><input type="text" name="fullName" size=50 value="${resume.fullName}"></dd>
         </dl>
         <h3>Контакты:</h3>
             <c:forEach var="type" items="<%=ContactsType.values()%>">
                 <dl>
                     <dt>${type.title}</dt>
-                    <dd><input type="text" name="${type.name()}" size=30 value="${resume.getContact(type)}"></dd>
+                    <dd><input type="text" name="${type.name()}" size=50 value="${resume.getContact(type)}"></dd>
                 </dl>
             </c:forEach>
         <hr>
         <dl>
             <dt><b>${SectionType.PERSONAL.title}</b></dt>
-            <dd><input type="text" name="${SectionType.PERSONAL.name()}" size=100 value="${resume.getSection(SectionType.PERSONAL).contents}"></dd>
+            <dd><input type="text" name="${SectionType.PERSONAL.name()}" size=80 value="${resume.getSection(SectionType.PERSONAL).contents}"></dd>
         </dl>
 
         <dl>
             <dt><b>${SectionType.OBJECTIVE.title}</b></dt>
-            <dd><input type="text" name="${SectionType.OBJECTIVE.name()}" size=100 value="${resume.getSection(SectionType.OBJECTIVE).contents}"></dd>
+            <dd><input type="text" name="${SectionType.OBJECTIVE.name()}" size=80 value="${resume.getSection(SectionType.OBJECTIVE).contents}"></dd>
         </dl>
 
-        <h3>${SectionType.ACHIEVEMENT.title}</h3>
+        <h3>${SectionType.ACHIEVEMENT.title}:</h3>
         <p><textarea name="${SectionType.ACHIEVEMENT.name()}" rows=10 cols=100 name="text">${resume.getSection(SectionType.ACHIEVEMENT).contents}</textarea></p>
 
-        <h3>${SectionType.QUALIFICATIONS.title}</h3>
+        <h3>${SectionType.QUALIFICATIONS.title}:</h3>
         <p><textarea name="${SectionType.QUALIFICATIONS.name()}" rows=10 cols=100 name="text">${resume.getSection(SectionType.QUALIFICATIONS).contents}</textarea></p>
         <hr>
         <button type="submit">Сохранить</button>
@@ -50,6 +50,6 @@
     </form>
     <br>
 </section>
-<jsp:include page="fragments/header.jsp"/>
+<jsp:include page="fragments/footer.jsp"/>
 </body>
 </html>

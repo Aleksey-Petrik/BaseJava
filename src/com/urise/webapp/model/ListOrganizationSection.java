@@ -45,6 +45,12 @@ public class ListOrganizationSection extends AbstractSection {
     }
 
     @Override
+    public String getHtmlContents() {
+        //TODO чуть позже
+        return "HTML";
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
