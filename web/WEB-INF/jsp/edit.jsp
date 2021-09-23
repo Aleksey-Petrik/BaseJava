@@ -1,5 +1,5 @@
-<%@ page import="com.urise.webapp.model.ContactsType" %>
-<%@ page import="com.urise.webapp.model.SectionType" %>
+<%@ page import="com.urise.webapp.model.*" %>
+<%@ page import="com.urise.webapp.util.DateUtil" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
@@ -29,22 +29,60 @@
                 </dl>
             </c:forEach>
         <hr>
-        <dl>
-            <dt><b>${SectionType.PERSONAL.title}</b></dt>
-            <dd><input type="text" name="${SectionType.PERSONAL.name()}" size=80 value="${resume.getSection(SectionType.PERSONAL).contents}"></dd>
-        </dl>
 
-        <dl>
-            <dt><b>${SectionType.OBJECTIVE.title}</b></dt>
-            <dd><input type="text" name="${SectionType.OBJECTIVE.name()}" size=80 value="${resume.getSection(SectionType.OBJECTIVE).contents}"></dd>
-        </dl>
+        <c:forEach var="type" items="<%=SectionType.values()%>">
+            <c:set var="section" value="${resume.getSection(type)}"/>
 
-        <h3>${SectionType.ACHIEVEMENT.title}:</h3>
-        <p><textarea name="${SectionType.ACHIEVEMENT.name()}" rows=10 cols=100 name="text">${resume.getSection(SectionType.ACHIEVEMENT).contents}</textarea></p>
-
-        <h3>${SectionType.QUALIFICATIONS.title}:</h3>
-        <p><textarea name="${SectionType.QUALIFICATIONS.name()}" rows=10 cols=100 name="text">${resume.getSection(SectionType.QUALIFICATIONS).contents}</textarea></p>
-        <hr>
+            <jsp:useBean id="section" type="com.urise.webapp.model.AbstractSection"/>
+            <h3><a>${type.title}</a></h3>
+            <c:choose>
+                <c:when test="${type == 'OBJECTIVE'}">
+                    <input type="text" name="${type}" size=75 value="${section.contents}">
+                </c:when>
+                <c:when test="${type == 'PERSONAL'}">
+                    <textarea name="${type}" cols=75 rows=5>${section.contents}</textarea>
+                </c:when>
+                <c:when test="${type == 'QUALIFICATIONS' || type == 'ACHIEVEMENT'}">
+                    <textarea name="${type}" cols=75 rows=5>${section.contents}</textarea>
+                </c:when>
+                <c:when test="${type == 'EXPERIENCE' || type == 'EDUCATION'}">
+                    <c:forEach var="org" items="<%=((ListOrganizationSection)section).getList()%>" varStatus="counter">
+                        <dl>
+                            <dt><h4>Наименование:</h4></dt>
+                            <dd><input type="text" name="${type}" size=100 value="${org.organization.name}"></dd>
+                        </dl>
+                        <dl>
+                            <dt><h4>Сайт:</h4></dt>
+                            <dd><input type="text" name="${type}" size=100 value="${org.organization.url}"></dd>
+                        </dl>
+                        <br>
+                        <div style="margin-left: 30px">
+                            <c:forEach var="pos" items="${org.periods}">
+                                <jsp:useBean id="pos" type="com.urise.webapp.model.Organization.Period"/>
+                                <dl>
+                                    <dt><b>Начальная дата:</b></dt>
+                                    <dd>
+                                        <input type="month" name="${type}${counter.index}startDate" size=10
+                                               value="<%=DateUtil.format(pos.getDateBegin(), "yyyy-MM")%>">
+                                    </dd>
+                                </dl>
+                                <dl>
+                                    <dt><b>Конечная дата:</b></dt>
+                                    <dd>
+                                        <input type="month" name="${type}${counter.index}endDate" size=10
+                                               value="<%=DateUtil.format(pos.getDateEnd(), "yyyy-MM")%>">
+                                    </dd>
+                                </dl>
+                                <dl>
+                                    <dt><b>Должность:</b></dt>
+                                    <dd><textarea name="${type}${counter.index}title" cols=75 rows=5>${pos.content}</textarea></dd>
+                                </dl>
+                            </c:forEach>
+                        </div>
+                    </c:forEach>
+                </c:when>
+            </c:choose>
+        </c:forEach>
         <button type="submit">Сохранить</button>
         <button type="reset" onclick="window.history.back()">Отменить</button>
     </form>
