@@ -20,6 +20,9 @@ public class DateUtil {
     }
 
     public static String format(LocalDate date, String mask) {
+        if (date == null) {
+            return "";
+        }
         return LocalDate.now().compareTo(date) > 0 ? date.format(DateTimeFormatter.ofPattern(mask, Locale.ENGLISH)) : "Сейчас";
     }
 }
