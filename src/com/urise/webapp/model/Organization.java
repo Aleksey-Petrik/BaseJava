@@ -9,6 +9,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -16,12 +17,24 @@ import static com.urise.webapp.util.DateUtil.MASK_FOR_PRINT_PERIOD;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Organization implements Serializable {
-    private static final long serialVersionUID = 1L;
+    //Пустая организация, для вывода пустых полей ввода в html
+    public static final Organization EMPTY = new Organization("", "", Period.EMPTY);
 
+    private static final long serialVersionUID = 1L;
     private Link link;
-    private final List<Period> periods = new ArrayList<>();
+    private List<Period> periods = new ArrayList<>();
 
     public Organization() {
+    }
+
+    public Organization(Link link, List<Period> periods) {
+        Objects.requireNonNull(link, "organization org mast not be null!");
+        this.link = link;
+        this.periods = periods;
+    }
+
+    public Organization(String name, String url, Period... periods) {
+        this(new Link(name, url), Arrays.asList(periods));
     }
 
     public Organization(Link link) {
@@ -71,6 +84,8 @@ public class Organization implements Serializable {
 
     @XmlAccessorType(XmlAccessType.FIELD)
     public static class Period implements Serializable {
+        //Пустой период, для вывода пустых полей ввода в html
+        public static final Period EMPTY = new Period();
         @XmlJavaTypeAdapter(LocalDateAdapter.class)
         private LocalDate dateBegin;
         @XmlJavaTypeAdapter(LocalDateAdapter.class)
@@ -78,12 +93,10 @@ public class Organization implements Serializable {
         private String content;
 
         public Period() {
+            this(null, null, "");
         }
 
         public Period(LocalDate dateBegin, LocalDate dateEnd, String content) {
-            Objects.requireNonNull(dateBegin, "dateBegin org mast not be null!");
-            Objects.requireNonNull(dateEnd, "dateEnd org mast not be null!");
-            Objects.requireNonNull(content, "content org mast not be null!");
             this.dateBegin = dateBegin;
             this.dateEnd = dateEnd;
             this.content = content;
@@ -106,7 +119,9 @@ public class Organization implements Serializable {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             Period period = (Period) o;
-            return Objects.equals(dateBegin, period.dateBegin) && Objects.equals(dateEnd, period.dateEnd) && Objects.equals(content, period.content);
+            return Objects.equals(dateBegin, period.dateBegin)
+                    && Objects.equals(dateEnd, period.dateEnd)
+                    && Objects.equals(content, period.content);
         }
 
         @Override
@@ -116,11 +131,11 @@ public class Organization implements Serializable {
 
         @Override
         public String toString() {
-            return DateUtil.format(dateBegin, MASK_FOR_PRINT_PERIOD) +
-                    "-" +
-                    DateUtil.format(dateEnd, MASK_FOR_PRINT_PERIOD) +
-                    " " +
-                    content;
+            return DateUtil.format(dateBegin, MASK_FOR_PRINT_PERIOD)
+                    + "-"
+                    + DateUtil.format(dateEnd, MASK_FOR_PRINT_PERIOD)
+                    + " "
+                    + content;
         }
     }
 }

@@ -19,6 +19,10 @@ public class ListOrganizationSection extends AbstractSection {
     public ListOrganizationSection() {
     }
 
+    public ListOrganizationSection(List<Organization> organizations){
+        this.organizations = organizations;
+    }
+
     public List<Organization> getList() {
         return organizations;
     }
@@ -49,14 +53,19 @@ public class ListOrganizationSection extends AbstractSection {
         StringBuilder sb = new StringBuilder("<ul>");
         for (Organization org : organizations) {
             sb.append("<li>")
-                    .append("<a href=" + org.getOrganization().getUrl() + "><h4>" + org.getOrganization().getName() + "</h4></a>");
+                    .append("<a href=")
+                    .append(org.getOrganization().getUrl())
+                    .append("><h4>")
+                    .append(org.getOrganization().getName())
+                    .append("</h4></a>");
 
             sb.append("<ul>");
             org.getPeriods().forEach(period -> sb
                     .append("<li>")
-                    .append("<b>" + DateUtil.format(period.getDateBegin(), MASK_FOR_PRINT_PERIOD))
-                    .append("-")
-                    .append(DateUtil.format(period.getDateEnd(), MASK_FOR_PRINT_PERIOD) + "</b>")
+                    .append("<b>")
+                    .append(DateUtil.format(period.getDateBegin(), MASK_FOR_PRINT_PERIOD))
+                    .append("-").append(DateUtil.format(period.getDateEnd(), MASK_FOR_PRINT_PERIOD))
+                    .append("</b>")
                     .append("  ")
                     .append(period.getContent())
                     .append("</li>"));
