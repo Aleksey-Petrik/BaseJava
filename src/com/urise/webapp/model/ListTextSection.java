@@ -8,8 +8,8 @@ import java.util.Objects;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ListTextSection extends AbstractSection {
+    public static final ListTextSection EMPTY = new ListTextSection();
     private static final long serialVersionUID = 1L;
-
     private final List<String> contents = new ArrayList<>();
 
     public ListTextSection() {
