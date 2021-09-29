@@ -31,6 +31,10 @@ public class ListOrganizationSection extends AbstractSection {
         organizations.add(organization);
     }
 
+    public void addAllOrganizations(List<Organization> organizations){
+        this.organizations.addAll(organizations);
+    }
+
     @Override
     public String getContents() {
         StringBuilder sb = new StringBuilder();
