@@ -19,7 +19,7 @@ public class ListOrganizationSection extends AbstractSection {
     public ListOrganizationSection() {
     }
 
-    public ListOrganizationSection(List<Organization> organizations){
+    public ListOrganizationSection(List<Organization> organizations) {
         this.organizations = organizations;
     }
 
@@ -31,7 +31,7 @@ public class ListOrganizationSection extends AbstractSection {
         organizations.add(organization);
     }
 
-    public void addAllOrganizations(List<Organization> organizations){
+    public void addAllOrganizations(List<Organization> organizations) {
         this.organizations.addAll(organizations);
     }
 
