@@ -53,7 +53,7 @@
                         </dl>
                         <dl>
                             <dt><h4>Сайт:</h4></dt>
-                            <dd><input type="text" name="${type}" size=100 value="${org.organization.url}"></dd>
+                            <dd><input type="text" name="${type}url" size=100 value="${org.organization.url}"></dd>
                         </dl>
                         <br>
                         <div style="margin-left: 30px">
@@ -75,7 +75,7 @@
                                 </dl>
                                 <dl>
                                     <dt><b>Должность:</b></dt>
-                                    <dd><textarea name="${type}${counter.index}title" cols=75 rows=5>${pos.content}</textarea></dd>
+                                    <dd><textarea name="${type}${counter.index}contents" cols=75 rows=5>${pos.content}</textarea></dd>
                                 </dl>
                             </c:forEach>
                         </div>
