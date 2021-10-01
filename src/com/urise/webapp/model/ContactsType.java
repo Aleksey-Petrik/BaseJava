@@ -1,5 +1,8 @@
 package com.urise.webapp.model;
 
+import java.util.EnumMap;
+import java.util.Map;
+
 public enum ContactsType {
     TEL_NUMBER("Номер телефона:") {
         @Override
@@ -44,7 +47,7 @@ public enum ContactsType {
         }
     };
 
-    private String title;
+    private final String title;
 
     ContactsType(String title) {
         this.title = title;
@@ -60,5 +63,17 @@ public enum ContactsType {
 
     public String toHtml(String value) {
         return value != null ? toHtml0(value) : "";
+    }
+
+    public static Map<ContactsType, String> getEmptyContacts() {
+        Map<ContactsType, String> emptyContacts = new EnumMap<>(ContactsType.class);
+        emptyContacts.put(ContactsType.TEL_NUMBER, "");
+        emptyContacts.put(ContactsType.SKYPE, "");
+        emptyContacts.put(ContactsType.EMAIL, "");
+        emptyContacts.put(ContactsType.LINKED_IN, "");
+        emptyContacts.put(ContactsType.GITHUB, "");
+        emptyContacts.put(ContactsType.STACKOVERFLOW, "");
+        emptyContacts.put(ContactsType.HOME_SITE, "");
+        return emptyContacts;
     }
 }

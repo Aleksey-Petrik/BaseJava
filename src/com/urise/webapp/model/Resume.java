@@ -12,15 +12,17 @@ import java.util.*;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Resume implements Comparable<Resume>, Serializable {
+    public static final Resume EMPTY = getEmptyResume();
     private static final long serialVersionUID = 1L;
     // Unique identifier
     private String uuid;
     private String fullName;
 
-    private final Map<ContactsType, String> contacts = new EnumMap<>(ContactsType.class);
-    private final Map<SectionType, AbstractSection> sections = new EnumMap<>(SectionType.class);
+    private Map<ContactsType, String> contacts = new EnumMap<>(ContactsType.class);
+    private Map<SectionType, AbstractSection> sections = new EnumMap<>(SectionType.class);
 
     public Resume() {
+        this(UUID.randomUUID().toString(), "");
     }
 
     public Resume(String fullName) {
@@ -96,5 +98,17 @@ public class Resume implements Comparable<Resume>, Serializable {
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
+    }
+
+    private static Resume getEmptyResume() {
+        Resume resume = new Resume(UUID.randomUUID().toString(), "");
+        resume.contacts = ContactsType.getEmptyContacts();
+        resume.addSection(SectionType.PERSONAL, TextSection.EMPTY);
+        resume.addSection(SectionType.OBJECTIVE, TextSection.EMPTY);
+        resume.addSection(SectionType.ACHIEVEMENT, ListTextSection.EMPTY);
+        resume.addSection(SectionType.QUALIFICATIONS, ListTextSection.EMPTY);
+        resume.addSection(SectionType.EDUCATION, new ListOrganizationSection(Collections.singletonList(Organization.EMPTY)));
+        resume.addSection(SectionType.EXPERIENCE, new ListOrganizationSection(Collections.singletonList(Organization.EMPTY)));
+        return resume;
     }
 }
