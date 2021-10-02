@@ -1,5 +1,6 @@
 package com.urise.webapp.model;
 
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -67,13 +68,7 @@ public enum ContactsType {
 
     public static Map<ContactsType, String> getEmptyContacts() {
         Map<ContactsType, String> emptyContacts = new EnumMap<>(ContactsType.class);
-        emptyContacts.put(ContactsType.TEL_NUMBER, "");
-        emptyContacts.put(ContactsType.SKYPE, "");
-        emptyContacts.put(ContactsType.EMAIL, "");
-        emptyContacts.put(ContactsType.LINKED_IN, "");
-        emptyContacts.put(ContactsType.GITHUB, "");
-        emptyContacts.put(ContactsType.STACKOVERFLOW, "");
-        emptyContacts.put(ContactsType.HOME_SITE, "");
+        Arrays.stream(ContactsType.values()).map(contact -> emptyContacts.put(contact, ""));
         return emptyContacts;
     }
 }
