@@ -14,7 +14,7 @@ public class DateUtil {
     }
 
     public static LocalDate parse(String date, String mask) {
-        if ("Сейчас".equals(date)) {
+        if ("Сейчас".equals(date) || date.trim().isEmpty()) {
             return _NOW_;
         }
         return LocalDate.parse("01/" + date, DateTimeFormatter.ofPattern("dd/" + mask));
