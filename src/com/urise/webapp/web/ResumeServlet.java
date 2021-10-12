@@ -31,7 +31,7 @@ public class ResumeServlet extends HttpServlet {
             request.getRequestDispatcher("/WEB-INF/jsp/list.jsp").forward(request, response);
             return;
         }
-        Resume resume = null;
+        Resume resume;
         switch (action) {
             case "delete":
                 storage.delete(uuid);
@@ -89,7 +89,7 @@ public class ResumeServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         request.setCharacterEncoding("UTF-8");
         String uuid = request.getParameter("uuid");
         String fullName = request.getParameter("fullName");
@@ -166,10 +166,8 @@ public class ResumeServlet extends HttpServlet {
 
             if (oldResume == null) {
                 storage.save(newResume);
-            } else {
-                if (!newResume.equals(oldResume)) {
-                    storage.update(newResume);
-                }
+            } else if (!newResume.equals(oldResume)) {
+                storage.update(newResume);
             }
         }
         response.sendRedirect("resume");
