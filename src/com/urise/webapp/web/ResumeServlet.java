@@ -12,8 +12,10 @@ import javax.servlet.http.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.*;
 
 public class ResumeServlet extends HttpServlet {
+    private final Logger log = Logger.getLogger(ResumeServlet.class.getName());
     private Storage storage;
 
     @Override
@@ -34,13 +36,16 @@ public class ResumeServlet extends HttpServlet {
         Resume resume;
         switch (action) {
             case "delete":
+                log.info("Delete - " + uuid);
                 storage.delete(uuid);
                 response.sendRedirect("resume");
                 return;
             case "view":
+                log.info("command View - " + uuid);
                 resume = storage.get(uuid);
                 break;
             case "edit":
+                log.info("command Edit - " + uuid);
                 resume = storage.get(uuid);
                 for (SectionType type : SectionType.values()) {
                     AbstractSection section = resume.getSection(type);
