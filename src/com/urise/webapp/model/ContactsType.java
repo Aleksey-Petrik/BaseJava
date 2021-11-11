@@ -71,4 +71,5 @@ public enum ContactsType {
         Arrays.stream(ContactsType.values()).map(contact -> emptyContacts.put(contact, ""));
         return emptyContacts;
     }
+
 }
